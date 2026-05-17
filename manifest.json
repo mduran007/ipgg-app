@@ -1,0 +1,25 @@
+{
+  "name": "IPGG - Rede de Suporte ao Idoso",
+  "short_name": "IPGG Rede",
+  "description": "Encontre serviços de saúde, assistência social e cidadania na região de São Miguel, Itaim Paulista e Ermelino Matarazzo",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0f1e",
+  "theme_color": "#1a237e",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1a237e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="IPGG Rede">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<title>IPGG - Rede de Suporte ao Idoso</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  min-height:100vh;
+  background:#0a0f1a;
+  color:#e2e8f0;
+  font-family:'DM Sans',system-ui,sans-serif
+}
+
+/* TOPO — layout antigo com letras um pouco maiores */
+.hd{
+  background:linear-gradient(135deg,#1a237e 0%,#6a1b9a 100%);
+  padding:28px 20px 24px;
+  position:relative;
+  overflow:hidden
+}
+
+.hd::after{
+  content:'';
+  position:absolute;
+  top:-50%;
+  right:-20%;
+  width:300px;
+  height:300px;
+  background:radial-gradient(circle,rgba(255,255,255,.06) 0%,transparent 70%);
+  border-radius:50%
+}
+
+.hd-in{
+  max-width:960px;
+  margin:0 auto;
+  position:relative;
+  z-index:1
+}
+
+.hd-tag{
+  font-size:48px;
+  font-weight:800;
+  letter-spacing:2.5px;
+  color:#00FF00;
+  margin-bottom:6px;
+  text-transform:uppercase;
+  text-align: center
+}
+
+.hd-t{
+  font-size:36px;
+  font-weight:800;
+  color:#fff;
+  line-height:1.2;
+  text-align: center
+}
+
+.hd-s{
+  font-size:26px;
+  color:#d1c4e9;
+  margin-top:6px;
+  text-align: center
+}
+
+/* Stats simples, sem mudar muito o layout antigo */
+.stats{
+  display:flex;
+  gap:35px;
+  margin-top:12px;
+  flex-wrap:wrap;
+  justify-content:center
+}
+
+.stat{
+  font-size:20px;
+  color:#FFDE21;
+  background:rgba(255, 255, 224, 0.1);
+  border:1px solid rgba(255, 255, 224, 0.4);
+  border-radius:20px;
+  padding:4px 10px;
+  font-weight:600
+}
+
+.stat b{
+  color:#FFDE21
+}
+
+.ct{
+  max-width:960px;
+  margin:0 auto;
+  padding:24px 20px
+}
+
+.sb{
+  background:#141b2d;
+  border-radius:16px;
+  padding:18px;
+  border:1px solid #1e293b
+}
+
+.sb-l{
+  font-size:20px;
+  font-weight:700;
+  color:#94a3b8;
+  margin-bottom:8px;
+  text-transform:uppercase;
+  letter-spacing:.5px
+}
+
+.sb-icon{
+  display:none
+}
+
+.sb-i{
+  width:100%;
+  padding:12px 14px;
+  border-radius:10px;
+  border:1px solid #334155;
+  background:#0a0f1a;
+  color:#e2e8f0;
+  font-size:20px;
+  outline:none;
+  transition:border .2s
+}
+
+.sb-i:focus{
+  border-color:#7c3aed
+}
+
+.sb-i::placeholder{
+  color:#475569
+}
+
+.br{
+  display:flex;
+  gap:8px;
+  margin-top:10px
+}
+
+.bb{
+  flex:1;
+  padding:12px 0;
+  border-radius:10px;
+  border:none;
+  background:linear-gradient(135deg,#1a237e,#6a1b9a);
+  color:#fff;
+  font-size:18px;
+  font-weight:700;
+  cursor:pointer;
+  transition:opacity .2s
+}
+
+.bb:hover{
+  opacity:.9
+}
+
+.bb:disabled{
+  opacity:.5;
+  cursor:wait
+}
+
+.bg{
+  padding:12px 16px;
+  border-radius:10px;
+  border:1px solid #334155;
+  background:#141b2d;
+  color:#b39ddb;
+  font-size:18px;
+  font-weight:600;
+  cursor:pointer
+}
+
+.er{
+  margin-top:10px;
+  padding:9px 12px;
+  border-radius:8px;
+  background:#2d0a0a;
+  border:1px solid #7f1d1d;
+  color:#fca5a5;
+  font-size:13px;
+  display:none
+}
+
+.er.sh{
+  display:block
+}
+
+.fa{
+  margin-top:10px;
+  padding:9px 12px;
+  border-radius:8px;
+  background:#0a2d0f;
+  border:1px solid #14532d;
+  color:#86efac;
+  font-size:12px;
+  display:none
+}
+
+.fa.sh{
+  display:block
+}
+
+/* Filtro por região — estilo compatível com o layout antigo */
+.rg{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:16px;
+  display:none
+}
+
+.rg.sh{
+  display:flex
+}
+
+.rg-b{
+  padding:5px 12px;
+  border-radius:20px;
+  border:1px solid #1e293b;
+  background:transparent;
+  color:#94a3b8;
+  font-size:11px;
+  font-weight:600;
+  cursor:pointer;
+  transition:all .2s
+}
+
+.rg-b.on{
+  border:none;
+  color:#fff;
+  background:linear-gradient(135deg,#1a237e,#6a1b9a)
+}
+
+/* Filtros antigos */
+.fl{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:10px;
+  display:none
+}
+
+.fl.sh{
+  display:flex
+}
+
+.fb{
+  padding:5px 12px;
+  border-radius:20px;
+  border:1px solid #1e293b;
+  background:transparent;
+  color:#94a3b8;
+  font-size:11px;
+  font-weight:600;
+  cursor:pointer;
+  transition:all .2s
+}
+
+.fb.on{
+  border:none;
+  color:#fff
+}
+
+.sf{
+  margin-top:12px;
+  display:none
+}
+
+.sf.sh{
+  display:block
+}
+
+.sf select{
+  width:100%;
+  padding:10px 14px;
+  border-radius:10px;
+  border:1px solid #334155;
+  background:#0a0f1a;
+  color:#e2e8f0;
+  font-size:13px;
+  outline:none;
+  cursor:pointer
+}
+
+.sf-l{
+  font-size:10px;
+  font-weight:700;
+  color:#b39ddb;
+  margin-bottom:6px;
+  display:block;
+  text-transform:uppercase;
+  letter-spacing:1px
+}
+
+.rc{
+  font-size:11px;
+  color:#64748b;
+  margin-top:14px;
+  padding-left:2px
+}
+
+.rc span{
+  color:#b39ddb;
+  font-weight:700
+}
+
+.rs{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:16px
+}
+
+.cd{
+  background:#141b2d;
+  border-radius:14px;
+  padding:14px 16px;
+  border:1px solid #1e293b;
+  position:relative;
+  transition:all .25s
+}
+
+.cd:hover{
+  border-color:#334155;
+  transform:translateY(-1px)
+}
+
+.cd.p1{
+  border-color:#7c3aed;
+  box-shadow:0 0 20px rgba(124,58,237,.12)
+}
+
+.bp{
+  position:absolute;
+  top:0;
+  right:0;
+  background:linear-gradient(135deg,#1a237e,#6a1b9a);
+  color:#fff;
+  font-size:8px;
+  font-weight:800;
+  padding:3px 10px;
+  border-bottom-left-radius:10px;
+  letter-spacing:1.5px;
+  display:none
+}
+
+.cd.p1 .bp{
+  display:block
+}
+
+.ci{
+  display:flex;
+  gap:12px
+}
+
+.ck{
+  width:38px;
+  height:38px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  flex-shrink:0
+}
+
+.cb{
+  flex:1;
+  min-width:0
+}
+
+.cm{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap
+}
+
+.ct2{
+  font-size:9px;
+  font-weight:800;
+  padding:2px 8px;
+  border-radius:6px;
+  text-transform:uppercase;
+  letter-spacing:.8px
+}
+
+.dst{
+  font-size:13px;
+  font-weight:700;
+  color:#fbbf24
+}
+
+.cn{
+  font-size:14px;
+  font-weight:700;
+  color:#f1f5f9;
+  margin-top:5px;
+  line-height:1.3
+}
+
+.ce{
+  font-size:12px;
+  color:#94a3b8;
+  margin-top:3px
+}
+
+.creg{
+  font-size:10px;
+  color:#b39ddb;
+  margin-top:3px;
+  font-weight:600
+}
+
+.ch{
+  font-size:11px;
+  color:#b39ddb;
+  margin-top:3px
+}
+
+.csp{
+  font-size:11px;
+  color:#64748b;
+  margin-top:6px;
+  line-height:1.4
+}
+
+.cbt{
+  display:flex;
+  gap:6px;
+  margin-top:10px;
+  flex-wrap:wrap
+}
+
+.bm{
+  padding:5px 12px;
+  border-radius:8px;
+  background:#1a237e;
+  color:#fff;
+  font-size:11px;
+  font-weight:700;
+  text-decoration:none;
+  display:inline-block
+}
+
+.bt{
+  padding:5px 12px;
+  border-radius:8px;
+  background:#064e3b33;
+  border:1px solid #065f46;
+  color:#34d399;
+  font-size:11px;
+  font-weight:700;
+  text-decoration:none;
+  display:inline-block
+}
+
+.bw{
+  padding:5px 12px;
+  border-radius:8px;
+  background:#075e2533;
+  border:1px solid #25d366;
+  color:#25d366;
+  font-size:11px;
+  font-weight:700;
+  text-decoration:none;
+  display:inline-block
+}
+
+.bs{
+  padding:5px 12px;
+  border-radius:8px;
+  background:#6a1b9a22;
+  border:1px solid #6a1b9a;
+  color:#ce93d8;
+  font-size:11px;
+  font-weight:700;
+  text-decoration:none;
+  display:inline-block;
+  cursor:pointer
+}
+
+.bs:hover{
+  background:#6a1b9a44
+}
+
+/* Modal antigo */
+.ov{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background:rgba(0,0,0,.75);
+  z-index:100;
+  overflow-y:auto;
+  padding:20px;
+  backdrop-filter:blur(4px)
+}
+
+.ov.sh{
+  display:block
+}
+
+.dt{
+  max-width:720px;
+  margin:0 auto;
+  background:#141b2d;
+  border-radius:18px;
+  border:1px solid #1e293b;
+  overflow:hidden
+}
+
+.dt-hd{
+  padding:20px;
+  position:relative
+}
+
+.dt-x{
+  position:absolute;
+  top:14px;
+  right:14px;
+  width:34px;
+  height:34px;
+  border-radius:10px;
+  border:1px solid #334155;
+  background:#0a0f1a;
+  color:#e2e8f0;
+  font-size:18px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center
+}
+
+.dt-x:hover{
+  background:#1e293b
+}
+
+.dt-nm{
+  font-size:18px;
+  font-weight:800;
+  color:#f1f5f9;
+  line-height:1.3;
+  padding-right:44px
+}
+
+.dt-bd{
+  display:inline-block;
+  font-size:9px;
+  font-weight:800;
+  padding:3px 10px;
+  border-radius:6px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-top:8px
+}
+
+.dt-info{
+  padding:0 20px 20px
+}
+
+.dt-sec{
+  margin-top:16px
+}
+
+.dt-st{
+  font-size:10px;
+  font-weight:800;
+  color:#b39ddb;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  margin-bottom:8px;
+  padding-bottom:4px;
+  border-bottom:1px solid #1e293b
+}
+
+.dt-row{
+  display:flex;
+  gap:8px;
+  padding:5px 0;
+  align-items:flex-start
+}
+
+.dt-ri{
+  font-size:14px;
+  width:20px;
+  text-align:center;
+  flex-shrink:0;
+  margin-top:1px
+}
+
+.dt-rt{
+  font-size:13px;
+  color:#cbd5e1;
+  line-height:1.4
+}
+
+.dt-rl{
+  font-weight:700;
+  color:#f1f5f9
+}
+
+.dt-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+  margin-top:4px
+}
+
+.dt-tag{
+  font-size:10px;
+  padding:4px 10px;
+  border-radius:8px;
+  background:#0a0f1a;
+  color:#94a3b8;
+  border:1px solid #1e293b
+}
+
+.dt-tag.h{
+  background:#6a1b9a22;
+  color:#ce93d8;
+  border-color:#6a1b9a55
+}
+
+.dt-tbl{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:6px
+}
+
+.dt-tbl th{
+  font-size:9px;
+  font-weight:700;
+  color:#94a3b8;
+  text-align:left;
+  padding:5px 8px;
+  background:#0a0f1a;
+  text-transform:uppercase;
+  letter-spacing:.5px
+}
+
+.dt-tbl td{
+  font-size:11px;
+  color:#cbd5e1;
+  padding:4px 8px;
+  border-top:1px solid #1e293b
+}
+
+.dt-act{
+  padding:16px 20px;
+  border-top:1px solid #1e293b;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap
+}
+
+.dt-act a{
+  padding:10px 18px;
+  border-radius:10px;
+  font-size:13px;
+  font-weight:700;
+  text-decoration:none;
+  text-align:center;
+  flex:1;
+  min-width:110px
+}
+
+.ft{
+  margin-top:28px;
+  padding:14px 0;
+  border-top:1px solid #1e293b;
+  text-align:center;
+  display:none
+}
+
+.ft.sh{
+  display:block
+}
+
+.ft-t{
+  font-size:10px;
+  color:#475569;
+  line-height:1.6
+}
+
+/* Autocomplete antigo */
+.ac{
+  position:relative
+}
+
+.ac-list{
+  position:absolute;
+  top:100%;
+  left:0;
+  right:0;
+  background:#141b2d;
+  border:1px solid #334155;
+  border-top:none;
+  border-radius:0 0 12px 12px;
+  max-height:220px;
+  overflow-y:auto;
+  z-index:50;
+  display:none
+}
+
+.ac-list.sh{
+  display:block
+}
+
+.ac-item{
+  padding:10px 14px;
+  font-size:13px;
+  color:#cbd5e1;
+  cursor:pointer;
+  border-bottom:1px solid #1e293b;
+  line-height:1.4
+}
+
+.ac-item:hover,
+.ac-item.sel{
+  background:#1e293b;
+  color:#fff
+}
+
+.ac-item:last-child{
+  border-bottom:none;
+  border-radius:0 0 12px 12px
+}
+
+.ac-item small{
+  display:block;
+  font-size:10px;
+  color:#64748b;
+  margin-top:2px
+}
+
+.ac-load{
+  padding:12px 14px;
+  font-size:12px;
+  color:#64748b;
+  text-align:center
+}
+
+
+/* ============================================
+   VERSÃO MOBILE — otimizada para idosos
+   ============================================ */
+
+/* Layout geral */
+.ct{
+  max-width:100%;
+  padding:12px 14px
+}
+
+.hd{
+  padding:16px 14px 14px
+}
+
+.hd-in{
+  max-width:100%
+}
+
+.hd-tag{
+  font-size:20px;
+  letter-spacing:1px
+}
+
+.hd-t{
+  font-size:20px
+}
+
+.hd-s{
+  font-size:16px
+}
+
+.stats{
+  gap:8px;
+  flex-wrap:wrap
+}
+
+.stat{
+  font-size:14px;
+  padding:4px 10px
+}
+
+/* ===== BUSCA — GPS em destaque ===== */
+.sb{
+  padding:16px;
+  border-radius:14px;
+  display:flex;
+  flex-direction:column;
+  gap:12px
+}
+
+.sb-l{
+  display:none
+}
+
+.bg-mob{
+  width:100%;
+  padding:18px 20px;
+  font-size:20px;
+  font-weight:700;
+  border:none;
+  border-radius:14px;
+  background:linear-gradient(135deg,#1565c0,#0d47a1);
+  color:#fff;
+  cursor:pointer;
+  min-height:60px;
+  letter-spacing:.3px;
+  box-shadow:0 4px 15px rgba(21,101,192,.4);
+  transition:all .2s
+}
+
+.bg-mob:active{
+  transform:scale(.97);
+  opacity:.9
+}
+
+.sb-div{
+  text-align:center;
+  color:#64748b;
+  font-size:14px;
+  padding:4px 0;
+  position:relative
+}
+
+.sb-div::before,.sb-div::after{
+  content:"";
+  position:absolute;
+  top:50%;
+  width:30%;
+  height:1px;
+  background:#334155
+}
+
+.sb-div::before{left:0}
+.sb-div::after{right:0}
+
+.sb-i{
+  font-size:18px;
+  padding:14px 14px;
+  min-height:52px;
+  border-radius:14px;
+  width:100%;
+  box-sizing:border-box
+}
+
+.br{
+  display:contents
+}
+
+.bb{
+  width:100%;
+  padding:16px 0;
+  font-size:18px;
+  border-radius:14px;
+  min-height:52px
+}
+
+.bg{
+  display:none
+}
+
+/* Erro e endereço encontrado */
+.er{
+  font-size:15px;
+  padding:12px 14px;
+  border-radius:10px
+}
+
+.fa{
+  font-size:15px;
+  padding:12px 14px;
+  border-radius:10px
+}
+
+/* ===== FILTROS — scroll horizontal com toque ===== */
+.rg,.fl{
+  flex-wrap:nowrap;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  padding-bottom:4px;
+  gap:8px;
+  justify-content:flex-start
+}
+
+.rg::-webkit-scrollbar,.fl::-webkit-scrollbar{
+  display:none
+}
+
+.rg-b{
+  white-space:nowrap;
+  flex-shrink:0;
+  padding:10px 16px;
+  font-size:15px;
+  border-radius:25px;
+  min-height:44px;
+  line-height:1.3
+}
+
+.fb{
+  white-space:nowrap;
+  flex-shrink:0;
+  padding:10px 14px;
+  font-size:14px;
+  border-radius:25px;
+  min-height:44px;
+  line-height:1.3
+}
+
+/* Select de serviço */
+.sf select{
+  font-size:16px;
+  padding:14px 14px;
+  min-height:48px;
+  border-radius:12px
+}
+
+.sf-l{
+  font-size:14px;
+  margin-bottom:6px
+}
+
+/* Contagem */
+.rc{
+  font-size:15px;
+  margin-top:14px;
+  padding-left:4px
+}
+
+/* ===== CARDS ===== */
+.rs{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  margin-top:14px
+}
+
+.cd{
+  padding:16px 14px;
+  border-radius:14px
+}
+
+.ck{
+  width:44px;
+  height:44px;
+  font-size:22px;
+  border-radius:10px
+}
+
+.ct2{
+  font-size:12px;
+  padding:4px 10px;
+  border-radius:8px
+}
+
+.dst{
+  font-size:16px;
+  font-weight:700
+}
+
+.cn{
+  font-size:18px;
+  margin-top:6px;
+  line-height:1.3
+}
+
+.ce{
+  font-size:15px;
+  margin-top:4px;
+  line-height:1.4
+}
+
+.creg{
+  font-size:14px;
+  margin-top:4px
+}
+
+.ch{
+  font-size:14px;
+  margin-top:4px
+}
+
+.csp{
+  font-size:14px;
+  margin-top:8px
+}
+
+.bp{
+  font-size:11px;
+  padding:5px 12px;
+  border-bottom-left-radius:12px
+}
+
+/* Botões de ação — grid 2x2 grandes */
+.cbt{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:12px
+}
+
+.bm,.bt,.bw,.bs{
+  padding:14px 10px;
+  border-radius:12px;
+  font-size:15px;
+  min-height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-weight:600
+}
+
+/* Botão telefone em destaque — verde */
+.bt{
+  background:linear-gradient(135deg,#2e7d32,#1b5e20)!important;
+  color:#fff!important;
+  border-color:#2e7d32!important;
+  font-size:16px
+}
+
+/* ===== PAGINAÇÃO ===== */
+.pgn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  margin-top:18px;
+  padding:14px 0
+}
+
+.pgb{
+  padding:14px 22px;
+  border-radius:14px;
+  border:2px solid #7c3aed;
+  background:linear-gradient(135deg,#1a237e,#6a1b9a);
+  color:#fff;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+  min-height:52px;
+  min-width:120px;
+  transition:all .2s;
+  font-family:inherit
+}
+
+.pgb:active{
+  transform:scale(.96)
+}
+
+.pgb:disabled{
+  opacity:.35;
+  cursor:not-allowed;
+  border-color:#334155;
+  background:#1e293b
+}
+
+.pginfo{
+  font-size:16px;
+  font-weight:700;
+  color:#b39ddb;
+  padding:0 6px;
+  min-width:50px;
+  text-align:center
+}
+
+/* ===== MODAL ===== */
+.ov{
+  padding:8px
+}
+
+.dt{
+  max-width:100%;
+  border-radius:16px
+}
+
+.dt-nm{
+  font-size:20px;
+  padding-right:50px
+}
+
+.dt-bd{
+  font-size:12px;
+  padding:5px 12px
+}
+
+.dt-st{
+  font-size:13px;
+  margin-bottom:10px
+}
+
+.dt-rt{
+  font-size:15px
+}
+
+.dt-tag{
+  font-size:13px;
+  padding:6px 12px
+}
+
+.dt-tbl th{
+  font-size:12px;
+  padding:8px 10px
+}
+
+.dt-tbl td{
+  font-size:14px;
+  padding:8px 10px
+}
+
+.dt-act{
+  flex-direction:column;
+  gap:8px
+}
+
+.dt-act a{
+  padding:16px 20px;
+  font-size:17px;
+  min-height:52px;
+  width:100%;
+  text-align:center;
+  border-radius:12px
+}
+
+.dt-x{
+  width:48px;
+  height:48px;
+  font-size:24px
+}
+
+/* ===== AUTOCOMPLETE ===== */
+.ac-item{
+  padding:14px 14px;
+  font-size:15px
+}
+
+.ac-item small{
+  font-size:13px;
+  margin-top:4px
+}
+
+.ac-load{
+  padding:14px;
+  font-size:14px
+}
+
+/* ===== BOTÃO VOLTAR AO TOPO ===== */
+#topBtn{
+  display:none;
+  position:fixed;
+  bottom:24px;
+  right:16px;
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  border:none;
+  background:linear-gradient(135deg,#1a237e,#6a1b9a);
+  color:#fff;
+  font-size:24px;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 4px 20px rgba(0,0,0,.5);
+  cursor:pointer;
+  z-index:999;
+  transition:all .2s
+}
+
+#topBtn:active{
+  transform:scale(.9)
+}
+
+/* Rodapé */
+.ft{
+  max-width:100%
+}
+
+.ft-t{
+  font-size:12px
+}
+
+</style>
+</head>
+<body>
+<div class="hd"><div class="hd-in">
+<div class="hd-tag">IPGG – Rede de Suporte ao Idoso</div>
+<div class="hd-t">Encontre o Serviço Mais Próximo Na Região</div>
+<div class="hd-s">São Miguel · Itaim Paulista · Ermelino Matarazzo – SP</div>
+<div class="stats" id="stats"></div>
+</div></div>
+<div class="ct">
+<div class="sb">
+<button class="bg-mob" onclick="usarGPS()">📍 USAR MINHA LOCALIZAÇÃO (GPS)</button>
+<div class="er" id="erro"></div>
+<div class="fa" id="found"></div>
+</div>
+<div class="rg" id="regioes"></div>
+<div class="fl" id="filtros"></div>
+<div class="sf" id="sfilt"><label class="sf-l">🔬 Filtrar por serviço:</label><select id="ssel" onchange="filtS()"><option value="">Todos os Serviços</option></select></div>
+<div class="rc" id="rc"></div>
+<div class="rs" id="res"></div>
+<div class="ft" id="footer"><div class="ft-t">Dados: IPGG / CNES-DATASUS / Prefeitura de SP (2025)<br>Distâncias em linha reta. Use "Rota no Maps" para distância real.</div></div>
+</div>
+<div class="ov" id="ov" onclick="if(event.target===this)fD()"><div class="dt" id="dt"></div></div>
+<script>
+const P=[
+{nome:"IPGG – Inst. Paulista de Geriatria e Gerontologia",tipo:"Instituto",reg:"São Miguel Paulista",end:"Pç. Pe. Aleixo Monteiro Mafra, 34 - São Miguel Paulista",cep:"08011-010",tel:"(11) 2030-4000",lat:-23.4962,lng:-46.4451,hr:"Seg a Sex: 07:00–17:00",apoio:["Diagnóstico por Imagem (FIDI)","Assistência Farmacêutica","Lab. Próteses Dentárias","Biblioteca Especializada"],serv:["Geriatria e Gerontologia","Clínica Médica","Enfermagem","Saúde Bucal","Fisioterapia Gerontológica","Reabilitação Física e Psicossocial","Nutrição","Fonoaudiologia","Psicologia","Serviço Social","Educação Física","Atendimento Domiciliar","Raio-X Digital","Ultrassom","Tomografia Computadorizada","Mamografia","Densitometria Óssea"],conv:["SUS"],inst:[{t:"Imagem",d:"~3.350 exames/mês",s:"–"},{t:"Geral",d:"40 mil prontuários ativos",s:"–"},{t:"Geral",d:"6.000+ idosos/mês",s:"–"}],extra:"Aulas de violão/canto, alfabetização, inclusão digital, oficinas culturais, manicure, cabeleireiro, podologia, bailes, passeios culturais, esportes adaptados. Centro de ensino e pesquisa com pós-graduação em Gerontologia."},
+{nome:"Hospital Municipal Tide Setúbal",tipo:"Hospital",reg:"São Miguel Paulista",end:"R. Dr. José Guilherme Eiras, 123 - São Miguel Paulista",cep:"08010-220",tel:"(11) 5178-1250",lat:-23.4985,lng:-46.4420,hr:"24 horas",apoio:["Ambulância","Farmácia","Laboratório","Banco de Sangue","Diagnóstico por Imagem"],serv:["Pronto-Socorro Adulto","Pronto-Socorro Pediátrico","Cirurgia Geral","Clínica Médica","Pediatria","Ginecologia","Obstetrícia/Maternidade","Ortopedia","Anestesia","Psiquiatria","Neuroclínica","UTI Adulto","UTI Neonatal","Berçário","Raio-X","Ultrassom","Ressonância","Laboratório","Endoscopia","Eletrocardiografia","PEP"],conv:["SUS Ambulatorial","SUS Internação","SUS SADT","SUS Urgência"],inst:[{t:"Internação",d:"200 leitos totais",s:200},{t:"PS",d:"240 mil atend./ano",s:"–"},{t:"Internação",d:"10 mil internações/ano",s:"–"}]},
+{nome:"Hospital Geral de Itaim Paulista",tipo:"Hospital",reg:"Itaim Paulista",end:"Av. Marechal Tito, 6035 - Itaim Paulista",cep:"08115-100",tel:"(11) 2563-6300",lat:-23.4905,lng:-46.3970,hr:"24 horas",apoio:["Ambulância","Farmácia","Laboratório","Diagnóstico por Imagem"],serv:["Pronto-Socorro Adulto","Pronto-Socorro Pediátrico","Clínica Médica","Clínica Cirúrgica","Pediatria","Ginecologia","Obstetrícia/Maternidade","Ortopedia","Psiquiatria","UTI Adulto","UTI Neonatal","Raio-X","Ressonância Magnética","Laboratório","Endoscopia","Eletrocardiografia","Ambulatório Cirúrgico de Especialidades"],conv:["SUS Ambulatorial","SUS Internação","SUS SADT","SUS Urgência"],inst:[{t:"Internação",d:"301 leitos totais",s:301},{t:"UTI",d:"10 leitos UTI Adulto + 16 UTI Neonatal",s:26},{t:"PS",d:"~10 mil atend./mês",s:"–"}]},
+{nome:"Hospital Municipal Prof. Dr. Alípio Corrêa Netto",tipo:"Hospital",reg:"Ermelino Matarazzo",end:"Al. Rodrigo de Brum, 1989 - Vila Paranaguá",cep:"03807-230",tel:"(11) 2943-9944",lat:-23.5095,lng:-46.4750,hr:"24 horas",apoio:["Ambulância","Farmácia","Laboratório","Diagnóstico por Imagem"],serv:["Pronto-Socorro Adulto","Pronto-Socorro Pediátrico","Cirurgia Geral","Clínica Médica","Pediatria","Ginecologia","Obstetrícia/Maternidade","Ortopedia","UTI Adulto","UTI Neonatal","Raio-X","Ultrassom","Laboratório","Eletrocardiografia"],conv:["SUS Ambulatorial","SUS Internação","SUS SADT","SUS Urgência"]},
+{nome:"UPA Ermelino Matarazzo",tipo:"UPA",reg:"Ermelino Matarazzo",end:"R. Miguel Novais, 113 - Vila Paranaguá",cep:"03807-370",tel:"(11) 2574-3258",lat:-23.5060,lng:-46.4780,hr:"24 horas",apoio:["Ambulância","Raio-X","Laboratório"],serv:["Urgência e Emergência","Clínica Médica","Pediatria","Ortopedia","Raio-X","Eletrocardiografia","Exames Laboratoriais","PEP"],conv:["SUS Urgência"]},
+{nome:"UPA Tito Lopes",tipo:"UPA",reg:"São Miguel Paulista",end:"Av. Pires do Rio, 228 - Vila Americana",cep:"08020-000",tel:"(11) 4780-5114",lat:-23.4945,lng:-46.4470,hr:"24 horas",apoio:["Ambulância","Raio-X","Laboratório"],serv:["Urgência e Emergência","Clínica Médica","Pediatria","Ortopedia","Raio-X","Eletrocardiografia","Exames Laboratoriais"],conv:["SUS Urgência"],inst:[{t:"Emergência",d:"16 leitos de emergência",s:16},{t:"Observação",d:"18 leitos obs. adulto + 7 obs. infantil",s:25}]},
+{nome:"UPA Jardim Helena",tipo:"UPA",reg:"São Miguel Paulista",end:"Av. Kumaki Aoki, 785 - Jardim Helena",cep:"08090-370",tel:"(11) 2586-3812",lat:-23.4790,lng:-46.4310,hr:"24 horas",apoio:["Ambulância","Raio-X","Laboratório","Base SAMU"],serv:["Urgência e Emergência","Clínica Médica","Pediatria","Ortopedia","Cirurgia Geral","Odontologia 24h","Raio-X","Eletrocardiografia","Exames Laboratoriais"],conv:["SUS Urgência"],inst:[{t:"Emergência",d:"7 leitos de emergência",s:7},{t:"Observação",d:"16 leitos obs. adulto + 6 obs. infantil",s:22}]},
+{nome:"UPA Dr. Atualpa Girão Rabelo",tipo:"UPA",reg:"Itaim Paulista",end:"R. Ilha do Arvoredo, 10 - Itaim Paulista",cep:"08140-270",tel:"",lat:-23.4880,lng:-46.4020,hr:"24 horas",apoio:["Ambulância","Raio-X","Laboratório","Base SAMU"],serv:["Urgência e Emergência","Clínica Médica","Pediatria","Ortopedia","Cirurgia Geral","Odontologia 24h","Raio-X","Eletrocardiografia","Exames Laboratoriais"],conv:["SUS Urgência"],inst:[{t:"Emergência",d:"6 leitos de emergência",s:6},{t:"Observação",d:"16 leitos obs. adulto",s:16},{t:"Total",d:"31 leitos totais",s:31}]},
+{nome:"CAPS AD III São Miguel",tipo:"CAPS",reg:"São Miguel Paulista",end:"R. Taiuvinha, 200 - Vila Jacuí",cep:"",tel:"(11) 2031-6956",lat:-23.4870,lng:-46.4390,hr:"24 horas",apoio:["Acolhimento Noturno (8-12 vagas)"],serv:["Dependência de Álcool e Drogas","Acolhimento Integral 24h","Equipe Multiprofissional","Todas as Faixas Etárias"],conv:["SUS"]},
+{nome:"CAPS Adulto II São Miguel",tipo:"CAPS",reg:"São Miguel Paulista",end:"R. Antônio de Siqueira, 505 - São Miguel Paulista",cep:"",tel:"(11) 2956-8047",lat:-23.4950,lng:-46.4480,hr:"Seg a Sex: 07:00–19:00",apoio:[],serv:["Saúde Mental Adulto","Transtorno Mental Grave","Projeto Terapêutico Singular","Equipe Multiprofissional"],conv:["SUS"]},
+{nome:"CAPS IJ III São Miguel",tipo:"CAPS",reg:"São Miguel Paulista",end:"R. Arlindo Miragaia, 40 - São Miguel Paulista",cep:"",tel:"(11) 2214-7364",lat:-23.4930,lng:-46.4500,hr:"24 horas",apoio:["Acolhimento Noturno"],serv:["Saúde Mental Infantojuvenil","Crianças e Adolescentes (0-18 anos)","Acolhimento Integral 24h","Equipe Multiprofissional"],conv:["SUS"]},
+{nome:"AMA/UBS Chácara Cruzeiro do Sul",tipo:"AMA/UBS",reg:"São Miguel Paulista",end:"R. Mercedes Lopes, 986 - Vila Santana",cep:"03614-000",tel:"(11) 2641-5130",lat:-23.5100,lng:-46.4350,hr:"Seg a Sáb: 07:00–19:00",apoio:["Ambulância","Central de Esterilização","Farmácia","SAME","Serviço Social"],serv:["Atenção Primária","Imunização","Pré-Natal","Controle de Tabagismo","Diagnóstico por Imagem","Práticas Integrativas","Urgência e Emergência","Tuberculose","Vigilância em Saúde","Coleta de Materiais Biológicos"],conv:["SUS Ambulatorial","SUS SADT","SUS Urgência"],inst:[{t:"Urgência",d:"Consultórios Médicos",s:5},{t:"Ambulatorial",d:"Clínicas Básicas",s:3}]},
+{nome:"UBS Nitro Operária – Paulo Feldman",tipo:"UBS",reg:"São Miguel Paulista",end:"R. Cumaru, 14 - São Miguel Paulista",cep:"08010-380",tel:"(11) 2956-6923",lat:-23.4940,lng:-46.4430,hr:"Seg a Sex: 07:00–19:00",apoio:["Central de Esterilização","Farmácia","SAME"],serv:["Atenção Primária","Imunização","Pré-Natal","Atenção Psicossocial","Controle de Tabagismo","Fisioterapia","Práticas Integrativas","Tuberculose","Vigilância em Saúde","Coleta de Materiais Biológicos"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"UBS Cidade Nova São Miguel",tipo:"UBS",reg:"São Miguel Paulista",end:"R. Mohamed Ibrahim Saleh, 902 - Cidade Nova São Miguel",cep:"08042-130",tel:"(11) 2051-3560",lat:-23.4910,lng:-46.4510,hr:"Seg a Sex: 07:00–19:00",apoio:["Central de Esterilização","Academia da Saúde","Farmácia","SAME"],serv:["Atenção Primária","Imunização","Pré-Natal","Atenção Domiciliar","Atenção Psicossocial","Fisioterapia","Práticas Integrativas","Reabilitação","Tuberculose","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"UBS Jardim Lapenna",tipo:"UBS",reg:"São Miguel Paulista",end:"R. Serra da Juruoca, 367 - São Miguel Paulista",cep:"08071-180",tel:"(11) 2058-3722",lat:-23.4880,lng:-46.4370,hr:"Seg a Sex: 07:00–19:00",apoio:["Central de Esterilização","Farmácia","SAME"],serv:["Atenção Primária","Imunização","Pré-Natal","Práticas Integrativas","Vigilância em Saúde","Coleta de Materiais Biológicos"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"AMA/UBS Integrada Jardim Helena",tipo:"AMA/UBS",reg:"São Miguel Paulista",end:"Av. Kumaki Aoki, 785 - Jardim Helena",cep:"08090-370",tel:"(11) 2581-1661",lat:-23.4790,lng:-46.4310,hr:"Seg a Dom: 07:00–22:00",apoio:["Ambulância","Central de Esterilização","Farmácia","SAME","Serviço Social"],serv:["Atenção Primária","Imunização","Pré-Natal","Saúde Bucal","Diagnóstico por Imagem","Tuberculose","Vigilância em Saúde","Assistência a Emergências"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"UBS Jardim Maia",tipo:"UBS",reg:"São Miguel Paulista",end:"R. Marfim Vegetal, 108 - Jardim Maia",cep:"08081-330",tel:"(11) 2581-6962",lat:-23.4750,lng:-46.4260,hr:"Seg a Sex: 07:00–19:00",apoio:["Central de Esterilização","Farmácia","SAME"],serv:["Atenção Primária","Imunização","Pré-Natal","Saúde Bucal","Fisioterapia","Práticas Integrativas","Reabilitação","Tuberculose","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"AMA/UBS Integrada Parque Paulistano",tipo:"AMA/UBS",reg:"São Miguel Paulista",end:"R. Silveira Pires, 265 - Parque Paulistano",cep:"08080-160",tel:"(11) 2025-9468",lat:-23.4810,lng:-46.4340,hr:"Seg a Dom: 07:00–22:00",apoio:["Ambulância","Central de Esterilização","Farmácia","SAME"],serv:["Atenção Primária","Imunização","Saúde do Trabalhador","Pré-Natal","Saúde Bucal","Tuberculose","Vigilância em Saúde","Assistência a Emergências"],conv:["SUS Ambulatorial","SUS SADT","SUS Urgência"]},
+{nome:"UBS Cidade Pedro José Nunes",tipo:"UBS",reg:"São Miguel Paulista",end:"R. José Bargas, 143 - Jd. Pedro José Nunes",cep:"08061-020",tel:"(11) 2297-5453",lat:-23.4890,lng:-46.4470,hr:"Seg a Sex: 07:00–19:00",apoio:["Central de Esterilização","Farmácia","SAME"],serv:["Atenção Primária","Imunização","Pré-Natal","Tuberculose","Vigilância em Saúde","Coleta de Materiais Biológicos"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"UBS Dr. Thérsio Ventura",tipo:"UBS",reg:"São Miguel Paulista",end:"R. Arraial de Santa Bárbara, 996 - Cid. Pedro José Nunes",cep:"08061-360",tel:"(11) 2545-1026",lat:-23.4900,lng:-46.4490,hr:"Seg a Sex: 07:00–19:00",apoio:["Central de Esterilização","Farmácia","SAME"],serv:["Atenção Primária","Imunização","Pré-Natal","Saúde Bucal","Atenção Psicossocial","Práticas Integrativas","Tuberculose","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"UBS Jardim das Camélias",tipo:"UBS",reg:"São Miguel Paulista",end:"R. Trevo de Santa Maria, 79 - São Miguel Paulista",cep:"08050-570",tel:"(11) 2051-8788",lat:-23.4920,lng:-46.4520,hr:"Seg a Sex: 07:00–19:00",apoio:["Central de Esterilização","Farmácia","SAME","Serviço Social"],serv:["Atenção Primária","Imunização","Pré-Natal","Atenção Domiciliar","Tuberculose","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"UBS Santa Inês",tipo:"UBS",reg:"São Miguel Paulista",end:"R. Frei Fidelis Mota, 1001 - Pq. Cruzeiro do Sul",cep:"08070-130",tel:"(11) 2297-9669",lat:-23.4870,lng:-46.4440,hr:"Seg a Sex: 07:00–19:00",apoio:["Central de Esterilização","Farmácia","SAME"],serv:["Atenção Primária","Imunização","Pré-Natal","Atenção Psicossocial","Fisioterapia","Práticas Integrativas","Tuberculose","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"AMA/UBS Integrada Sítio da Casa Pintada",tipo:"AMA/UBS",reg:"São Miguel Paulista",end:"R. Maria Santana, 1069 - Jd. Casa Pintada",cep:"08050-130",tel:"(11) 2053-0800",lat:-23.4910,lng:-46.4540,hr:"Seg a Dom: 07:00–22:00",apoio:["Ambulância","Central de Esterilização","Farmácia","SAME","Serviço Social"],serv:["Atenção Primária","Imunização","Pré-Natal","Práticas Integrativas","Urgência e Emergência","Tuberculose","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT","SUS Urgência"]},
+{nome:"UBS União de Vila Nova",tipo:"UBS",reg:"São Miguel Paulista",end:"R. Catleias, 205 - São Miguel Paulista",cep:"08071-100",tel:"(11) 2297-4782",lat:-23.4880,lng:-46.4460,hr:"Seg a Sex: 07:00–19:00",apoio:["Central de Esterilização","Farmácia","SAME"],serv:["Atenção Primária","Imunização","Pré-Natal","Práticas Integrativas","Tuberculose","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"UBS União Vila Nova I",tipo:"UBS",reg:"São Miguel Paulista",end:"R. Graziele Baldark Gomes, 36 - São Miguel Paulista",cep:"08070-000",tel:"(11) 2956-3837",lat:-23.4885,lng:-46.4455,hr:"Seg a Sex: 07:00–19:00",apoio:["Central de Esterilização","Farmácia"],serv:["Estratégia Saúde da Família","Pré-Natal","Práticas Integrativas","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"UBS Vila Jacuí",tipo:"UBS",reg:"São Miguel Paulista",end:"R. Édipo Feliciano, 165 - Vila Jacuí",cep:"08060-220",tel:"(11) 2297-8709",lat:-23.4860,lng:-46.4410,hr:"Seg a Sex: 07:00–19:00",apoio:["Central de Esterilização","Farmácia","SAME","Serviço Social"],serv:["Imunização","Pré-Natal","Hanseníase","Práticas Integrativas","Tuberculose","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"UBS Jardim São Carlos",tipo:"UBS",reg:"São Miguel Paulista",end:"Av. César Augusto Romaro, 200 - Vila Jacuí",cep:"08062-000",tel:"(11) 4810-0660",lat:-23.4895,lng:-46.4430,hr:"Seg a Sex: 07:00–19:00",apoio:["Farmácia","SAME","Raio-X"],serv:["Estratégia Saúde da Família","Imunização","Pré-Natal","Saúde Bucal","Raio-X","Dispensação de Medicamentos"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"UBS Vila Progresso",tipo:"UBS",reg:"Itaim Paulista",end:"R. Real Horto, 115 - Vila Progresso",cep:"08245-260",tel:"(11) 2035-2488",lat:-23.5020,lng:-46.4280,hr:"Seg a Sex: 07:00–19:00",apoio:["Central de Esterilização","Farmácia","SAME","Serviço Social"],serv:["Imunização","Pré-Natal","Saúde Bucal","Órteses e Próteses","Lab. Prótese Dentária","Práticas Integrativas","Tuberculose","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"UBS Vila Ramos – Dr. Luiz A. de Campos",tipo:"UBS",reg:"Itaim Paulista",end:"Av. Augusto Antunes, 1631 - Limoeiro",cep:"08235-630",tel:"(11) 2052-6945",lat:-23.5050,lng:-46.4240,hr:"Seg a Sex: 07:00–19:00",apoio:["Central de Esterilização","Farmácia","SAME"],serv:["Atenção Primária","Imunização","Pré-Natal","Fisioterapia","Práticas Integrativas","Reabilitação","Tuberculose","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"UBS Vila Santana",tipo:"UBS",reg:"Itaim Paulista",end:"R. Vitor José de Castro, 84 - Vila Santana",cep:"08240-300",tel:"(11) 4780-5059",lat:-23.5060,lng:-46.4310,hr:"Seg a Sex: 07:00–19:00",apoio:["Central de Esterilização","Farmácia","SAME","Serviço Social"],serv:["Atenção Primária","Imunização","Pré-Natal","Atenção Psicossocial","Práticas Integrativas","Reabilitação","Tuberculose","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"UBS Dom João Nery",tipo:"UBS",reg:"Itaim Paulista",end:"Estrada Dom João Nery, 3260 - Jardim Nazaré",cep:"08151-000",tel:"(11) 2566-3624",lat:-23.4830,lng:-46.4150,hr:"Seg a Sex: 07:00–19:00",apoio:["Central de Esterilização","Farmácia","SAME"],serv:["Atenção Primária","Imunização","Pré-Natal","Práticas Integrativas","Tuberculose","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"UBS Jaraguá",tipo:"UBS",reg:"Itaim Paulista",end:"R. Domingues Vidigal, 97 - Vila Curuçá",cep:"08160-350",tel:"(11) 4780-5041",lat:-23.4980,lng:-46.4190,hr:"Seg a Sex: 07:00–19:00",apoio:["Central de Esterilização","Farmácia","SAME"],serv:["Atenção Primária","Imunização","Pré-Natal","Práticas Integrativas","Tuberculose","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"UBS Jardim Campos",tipo:"UBS",reg:"Itaim Paulista",end:"R. Crescente, 97 - Itaim Paulista",cep:"08160-080",tel:"(11) 2035-4922",lat:-23.4860,lng:-46.4100,hr:"Seg a Sex: 07:00–19:00",apoio:["Central de Esterilização","Farmácia","SAME"],serv:["Atenção Primária","Imunização","Pré-Natal","Oftalmologia","Práticas Integrativas","Reabilitação","Tuberculose","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"UBS Jardim Robru",tipo:"UBS",reg:"Itaim Paulista",end:"R. José Maria Alves de Deus, 288 - São Miguel Paulista",cep:"08150-350",tel:"(11) 4780-5042",lat:-23.4850,lng:-46.4130,hr:"Seg a Sex: 07:00–19:00",apoio:["Central de Esterilização","Farmácia","SAME"],serv:["Atenção Primária","Imunização","Pré-Natal","Práticas Integrativas","Tuberculose","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"UBS Jardim Silva Telles",tipo:"UBS",reg:"Itaim Paulista",end:"R. José Alexandre Machado, 541 - Itaim Paulista",cep:"08160-460",tel:"(11) 4780-5044",lat:-23.4870,lng:-46.4070,hr:"Seg a Sex: 07:00–19:00",apoio:["Central de Esterilização","Farmácia","SAME"],serv:["Atenção Primária","Imunização","Pré-Natal","Saúde Bucal","Práticas Integrativas","Tuberculose","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"UBS Parque Santa Rita",tipo:"UBS",reg:"Itaim Paulista",end:"R. José Pessota, 80 - Parque Santa Rita",cep:"08150-020",tel:"(11) 4780-5043",lat:-23.4840,lng:-46.4160,hr:"Seg a Sex: 07:00–19:00",apoio:["SAME","Serviço Social"],serv:["Atenção Primária","Imunização","Pré-Natal","Fisioterapia","Práticas Integrativas","Tuberculose"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"UBS Vila Curuçá",tipo:"UBS",reg:"Itaim Paulista",end:"R. Pedro Meira, 1 - Vila Curuçá",cep:"08030-500",tel:"(11) 4780-5037",lat:-23.4990,lng:-46.4230,hr:"Seg a Sex: 07:00–19:00",apoio:["Central de Esterilização","Academia da Saúde","Farmácia","SAME"],serv:["Atenção Primária","Imunização","Pré-Natal","Atenção Psicossocial","Práticas Integrativas","Tuberculose","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"UBS Vila Nova Curuçá",tipo:"UBS",reg:"Itaim Paulista",end:"R. Narceja, 51 - São Miguel Paulista",cep:"08032-340",tel:"(11) 4780-5088",lat:-23.4970,lng:-46.4210,hr:"Seg a Sex: 07:00–19:00",apoio:["Central de Esterilização","Farmácia","SAME","Serviço Social"],serv:["Atenção Primária","Imunização","Pré-Natal","Atenção Domiciliar","Saúde Bucal","Práticas Integrativas","Tuberculose","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"UBS Vila Itaim",tipo:"UBS",reg:"Itaim Paulista",end:"R. Rio Manuel Alves, 182 - Itaim Paulista",cep:"08190-450",tel:"(11) 2581-3737",lat:-23.4720,lng:-46.4200,hr:"Seg a Dom: 07:00–19:00",apoio:["Ambulância","Central de Esterilização","Farmácia","SAME","Serviço Social"],serv:["Atenção Primária","Imunização","Pré-Natal","Diagnóstico por Imagem","Práticas Integrativas","Tuberculose","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"AMA/UBS Camargo Novo",tipo:"AMA/UBS",reg:"Itaim Paulista",end:"R. Pedro de Alcântara, 350 - Jd. Camargo Novo",cep:"08225-200",tel:"(11) 2056-9877",lat:-23.4930,lng:-46.3980,hr:"Seg a Dom: 07:00–19:00",apoio:["Ambulância","Central de Esterilização","Farmácia","SAME"],serv:["Atenção Primária","Imunização","Pré-Natal","Urgência e Emergência","Tuberculose","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT","SUS Urgência"]},
+{nome:"UBS Keralux",tipo:"UBS",reg:"Itaim Paulista",end:"R. Antônio Ramos Rosa, 32 - Keralux",cep:"08225-060",tel:"(11) 2035-0414",lat:-23.4910,lng:-46.3950,hr:"Seg a Sex: 07:00–19:00",apoio:["Central de Esterilização","Farmácia","SAME"],serv:["Atenção Primária","Imunização","Pré-Natal","Práticas Integrativas","Tuberculose","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"UBS Ermelino Matarazzo",tipo:"UBS",reg:"Ermelino Matarazzo",end:"R. Manoel Quirino de Mattos, 215 - Ermelino Matarazzo",cep:"03807-020",tel:"(11) 2546-3498",lat:-23.5060,lng:-46.4780,hr:"Seg a Sex: 07:00–19:00",apoio:["Central de Esterilização","Farmácia","SAME"],serv:["Atenção Primária","Imunização","Pré-Natal","Atenção Psicossocial","Práticas Integrativas","Tuberculose","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"UBS Ponte Rasa",tipo:"UBS",reg:"Ermelino Matarazzo",end:"R. Cap. Pacheco e Chaves, 972 - Ponte Rasa",cep:"03805-000",tel:"(11) 2521-0775",lat:-23.5130,lng:-46.4870,hr:"Seg a Sex: 07:00–19:00",apoio:["Central de Esterilização","Farmácia","SAME"],serv:["Atenção Primária","Imunização","Pré-Natal","Saúde Bucal","Práticas Integrativas","Tuberculose","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"UBS Parque Boturussu",tipo:"UBS",reg:"Ermelino Matarazzo",end:"R. Serra do Jairé, 351 - Parque Boturussu",cep:"03814-000",tel:"(11) 2546-3063",lat:-23.5020,lng:-46.4730,hr:"Seg a Sex: 07:00–19:00",apoio:["Central de Esterilização","Farmácia","SAME"],serv:["Atenção Primária","Imunização","Pré-Natal","Práticas Integrativas","Tuberculose","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"UBS Jardim Matarazzo",tipo:"UBS",reg:"Ermelino Matarazzo",end:"R. Corriola, 47 - Jardim Matarazzo",cep:"03810-040",tel:"(11) 2546-7887",lat:-23.5080,lng:-46.4810,hr:"Seg a Sex: 07:00–19:00",apoio:["Central de Esterilização","Farmácia","SAME"],serv:["Atenção Primária","Imunização","Pré-Natal","Atenção Psicossocial","Práticas Integrativas","Tuberculose","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"UBS Vila Císper",tipo:"UBS",reg:"Ermelino Matarazzo",end:"Av. São Miguel, 5550 - Vila Císper",cep:"03804-050",tel:"(11) 2521-2244",lat:-23.5110,lng:-46.4890,hr:"Seg a Sex: 07:00–19:00",apoio:["Central de Esterilização","Farmácia","SAME"],serv:["Atenção Primária","Imunização","Pré-Natal","Saúde Bucal","Práticas Integrativas","Tuberculose","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"AMA Ermelino Matarazzo",tipo:"AMA/UBS",reg:"Ermelino Matarazzo",end:"R. Major Otávio Tosta, 681 - Ermelino Matarazzo",cep:"03807-100",tel:"(11) 2546-8770",lat:-23.5050,lng:-46.4760,hr:"Seg a Sáb: 07:00–19:00",apoio:["Ambulância","Central de Esterilização","Farmácia","SAME"],serv:["Atenção Primária","Urgência e Emergência","Imunização","Pré-Natal","Diagnóstico por Imagem","Tuberculose","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT","SUS Urgência"]},
+{nome:"AMA Vila Paranaguá",tipo:"AMA/UBS",reg:"Ermelino Matarazzo",end:"R. Paranaguá, 112 - Vila Paranaguá",cep:"03818-000",tel:"(11) 2521-7530",lat:-23.5090,lng:-46.4840,hr:"Seg a Sáb: 07:00–19:00",apoio:["Ambulância","Farmácia","SAME"],serv:["Atenção Primária","Urgência e Emergência","Imunização","Tuberculose","Vigilância em Saúde"],conv:["SUS Ambulatorial","SUS SADT","SUS Urgência"]},
+{nome:"CAPS Adulto II Ermelino",tipo:"CAPS",reg:"Ermelino Matarazzo",end:"R. Cantagalo, 540 - Ermelino Matarazzo",cep:"03807-250",tel:"(11) 2546-4088",lat:-23.5070,lng:-46.4800,hr:"Seg a Sex: 07:00–19:00",apoio:[],serv:["Saúde Mental Adulto","Transtorno Mental Grave","Projeto Terapêutico Singular","Equipe Multiprofissional"],conv:["SUS"]},
+{nome:"CEU São Miguel",tipo:"CEU",reg:"São Miguel Paulista",end:"R. Dr. José Artur Nova, 540 - São Miguel Paulista",cep:"08010-070",tel:"(11) 2297-5499",lat:-23.4975,lng:-46.4465,hr:"Seg a Sáb: 07:00–22:00 | Dom: 07:00–17:00",apoio:["Piscina","Teatro","Quadras","Biblioteca"],serv:["Teatro e Cinema Gratuito","Oficinas Culturais","Cursos Profissionalizantes","Esportes","Balé e Dança","Inclusão Digital","Biblioteca","Piscina","Ginástica para Idosos"],conv:[]},
+{nome:"CEU Jambeiro",tipo:"CEU",reg:"São Miguel Paulista",end:"R. James Holland, 1 - Jd. Helena",cep:"08090-410",tel:"(11) 2281-1407",lat:-23.4800,lng:-46.4350,hr:"Seg a Sáb: 07:00–22:00 | Dom: 07:00–17:00",apoio:["Piscina","Teatro","Quadras","Biblioteca"],serv:["Teatro e Cinema Gratuito","Oficinas Culturais","Esportes","Dança","Inclusão Digital","Biblioteca","Piscina","Ginástica para Idosos"],conv:[]},
+{nome:"CEU Parque Boturussu",tipo:"CEU",reg:"Ermelino Matarazzo",end:"Av. Paranaguá, 500 - Parque Boturussu",cep:"03818-000",tel:"(11) 2521-8740",lat:-23.5040,lng:-46.4750,hr:"Seg a Sáb: 07:00–22:00 | Dom: 07:00–17:00",apoio:["Piscina","Teatro","Quadras","Biblioteca"],serv:["Teatro e Cinema Gratuito","Oficinas Culturais","Esportes","Dança","Inclusão Digital","Biblioteca","Piscina","Ginástica para Idosos"],conv:[]},
+{nome:"CEU Camargo Novo",tipo:"CEU",reg:"Itaim Paulista",end:"R. Pedro de Alcântara, 350 - Jd. Camargo Novo",cep:"08225-200",tel:"(11) 2056-3997",lat:-23.4935,lng:-46.3985,hr:"Seg a Sáb: 07:00–22:00 | Dom: 07:00–17:00",apoio:["Piscina","Teatro","Quadras","Biblioteca"],serv:["Teatro e Cinema Gratuito","Oficinas Culturais","Cursos Profissionalizantes","Esportes","Dança","Inclusão Digital","Biblioteca","Piscina","Ginástica para Idosos"],conv:[]},
+{nome:"CRAS São Miguel",tipo:"CRAS",reg:"São Miguel Paulista",end:"R. Dr. José Artur Nova, 361 - São Miguel Paulista",cep:"08010-070",tel:"(11) 2297-3466",lat:-23.4970,lng:-46.4460,hr:"Seg a Sex: 08:00–17:00",apoio:[],serv:["Cadastro Único","Bolsa Família","BPC Idoso","Orientação Social","Grupos de Convivência","Encaminhamento para Serviços","Proteção Social Básica"],conv:[]},
+{nome:"CRAS Jardim Helena",tipo:"CRAS",reg:"São Miguel Paulista",end:"Av. Kumaki Aoki, 600 - Jardim Helena",cep:"08090-370",tel:"(11) 2581-3220",lat:-23.4795,lng:-46.4315,hr:"Seg a Sex: 08:00–17:00",apoio:[],serv:["Cadastro Único","Bolsa Família","BPC Idoso","Orientação Social","Grupos de Convivência","Proteção Social Básica"],conv:[]},
+{nome:"CRAS Vila Jacuí",tipo:"CRAS",reg:"São Miguel Paulista",end:"R. Taiuvinha, 150 - Vila Jacuí",cep:"08060-220",tel:"(11) 2297-6834",lat:-23.4865,lng:-46.4395,hr:"Seg a Sex: 08:00–17:00",apoio:[],serv:["Cadastro Único","Bolsa Família","BPC Idoso","Orientação Social","Grupos de Convivência","Proteção Social Básica"],conv:[]},
+{nome:"CRAS Itaim Paulista",tipo:"CRAS",reg:"Itaim Paulista",end:"R. Salvador Gianetti, 532 - Itaim Paulista",cep:"08160-000",tel:"(11) 2035-3030",lat:-23.4900,lng:-46.4050,hr:"Seg a Sex: 08:00–17:00",apoio:[],serv:["Cadastro Único","Bolsa Família","BPC Idoso","Orientação Social","Grupos de Convivência","Proteção Social Básica"],conv:[]},
+{nome:"CRAS Camargo Novo",tipo:"CRAS",reg:"Itaim Paulista",end:"R. Pedro de Alcântara, 100 - Jd. Camargo Novo",cep:"08225-200",tel:"(11) 2056-2181",lat:-23.4925,lng:-46.3975,hr:"Seg a Sex: 08:00–17:00",apoio:[],serv:["Cadastro Único","Bolsa Família","BPC Idoso","Orientação Social","Grupos de Convivência","Proteção Social Básica"],conv:[]},
+{nome:"CRAS Ermelino Matarazzo",tipo:"CRAS",reg:"Ermelino Matarazzo",end:"R. Manoel de Oliveira, 195 - Ermelino Matarazzo",cep:"03807-110",tel:"(11) 2546-8055",lat:-23.5055,lng:-46.4775,hr:"Seg a Sex: 08:00–17:00",apoio:[],serv:["Cadastro Único","Bolsa Família","BPC Idoso","Orientação Social","Grupos de Convivência","Proteção Social Básica"],conv:[]},
+{nome:"CRAS Ponte Rasa",tipo:"CRAS",reg:"Ermelino Matarazzo",end:"R. Cap. Pacheco e Chaves, 500 - Ponte Rasa",cep:"03805-000",tel:"(11) 2521-6620",lat:-23.5125,lng:-46.4865,hr:"Seg a Sex: 08:00–17:00",apoio:[],serv:["Cadastro Único","Bolsa Família","BPC Idoso","Orientação Social","Grupos de Convivência","Proteção Social Básica"],conv:[]},
+{nome:"CCI São Miguel – Centro de Convivência do Idoso",tipo:"CCI",reg:"São Miguel Paulista",end:"Pç. Pe. Aleixo Monteiro Mafra, s/n - São Miguel Paulista",cep:"08011-010",tel:"(11) 2297-5100",lat:-23.4960,lng:-46.4448,hr:"Seg a Sex: 08:00–17:00",apoio:[],serv:["Dança de Salão","Artesanato","Jogos e Recreação","Passeios Culturais","Ginástica","Coral","Oficina de Memória","Orientação Nutricional","Socialização"],conv:[]},
+{nome:"CCI Ermelino – Centro de Convivência do Idoso",tipo:"CCI",reg:"Ermelino Matarazzo",end:"R. Corriola, 100 - Jardim Matarazzo",cep:"03810-040",tel:"(11) 2546-7900",lat:-23.5075,lng:-46.4805,hr:"Seg a Sex: 08:00–17:00",apoio:[],serv:["Baile da Terceira Idade","Artesanato","Jogos e Recreação","Passeios Culturais","Ginástica","Oficina de Memória","Socialização"],conv:[]},
+{nome:"CCI Itaim – Centro de Convivência do Idoso",tipo:"CCI",reg:"Itaim Paulista",end:"R. Crescente, 100 - Itaim Paulista",cep:"08160-080",tel:"(11) 2035-4900",lat:-23.4855,lng:-46.4095,hr:"Seg a Sex: 08:00–17:00",apoio:[],serv:["Dança de Salão","Artesanato","Jogos e Recreação","Passeios Culturais","Ginástica","Coral","Socialização"],conv:[]},
+{nome:"Bom Prato São Miguel",tipo:"Alimentação",reg:"São Miguel Paulista",end:"R. José Otoni, 256 - São Miguel Paulista",cep:"",tel:"",lat:-23.4955,lng:-46.4460,hr:"Seg a Dom: 07:00–14:00",apoio:[],serv:["Café da manhã R$0,50","Almoço R$1,00"],conv:[]},
+{nome:"Bom Prato Itaim Paulista",tipo:"Alimentação",reg:"Itaim Paulista",end:"R. Alberto Ramos, 250 - Itaim Paulista",cep:"08160-210",tel:"",lat:-23.4890,lng:-46.4030,hr:"Seg a Dom: 07:00–14:00",apoio:[],serv:["Café da manhã R$0,50","Almoço R$1,00"],conv:[]},
+{nome:"Teatro Arthur Azevedo",tipo:"Cultura",reg:"São Miguel Paulista",end:"Av. Nordestina, 727 - São Miguel Paulista",cep:"08010-000",tel:"(11) 2297-3278",lat:-23.4948,lng:-46.4468,hr:"Conforme programação",apoio:[],serv:["Peças Teatrais Gratuitas","Shows e Espetáculos","Dança","Eventos Culturais"],conv:[]},
+{nome:"Museu de São Miguel Paulista",tipo:"Cultura",reg:"São Miguel Paulista",end:"R. São Quirino, 95 - São Miguel Paulista",cep:"08011-020",tel:"(11) 2297-7948",lat:-23.4958,lng:-46.4445,hr:"Ter a Dom: 10:00–17:00",apoio:[],serv:["Acervo Histórico","Exposições","Visitas Guiadas","Capela Jesuíta (1622)","Educação Patrimonial"],conv:[]},
+{nome:"Fábrica de Cultura São Miguel",tipo:"Cultura",reg:"São Miguel Paulista",end:"R. Cesare Ferrario, s/n - São Miguel Paulista",cep:"08011-030",tel:"(11) 2297-1800",lat:-23.4965,lng:-46.4455,hr:"Seg a Sáb: 09:00–21:00",apoio:[],serv:["Cursos Gratuitos","Estúdio de Música","Biblioteca","Teatro","Dança","Artes Visuais","Inclusão Digital"],conv:[]},
+{nome:"Biblioteca Raimundo de Menezes",tipo:"Cultura",reg:"São Miguel Paulista",end:"Av. Nordestina, 780 - São Miguel Paulista",cep:"",tel:"(11) 2297-4053",lat:-23.4945,lng:-46.4470,hr:"Seg a Sex: 08:00–17:00",apoio:[],serv:["Acervo Literário","Espaço de Leitura","Internet Gratuita","Contação de Histórias"],conv:[]},
+{nome:"Biblioteca Vicente Paulo Guimarães",tipo:"Cultura",reg:"Itaim Paulista",end:"R. Jaguar, 225 - Vila Curuçá",cep:"",tel:"(11) 2035-5322",lat:-23.4995,lng:-46.4200,hr:"Seg a Sex: 08:00–17:00",apoio:[],serv:["Acervo Literário","Espaço de Leitura","Internet Gratuita"],conv:[]},
+{nome:"Casa de Cultura São Miguel",tipo:"Cultura",reg:"São Miguel Paulista",end:"R. Irineu Bonardi, 169 - Vila Pedroso",cep:"",tel:"(11) 2297-9177",lat:-23.4960,lng:-46.4440,hr:"Seg a Sex: 09:00–18:00",apoio:[],serv:["Oficinas Culturais","Eventos","Espaço Comunitário"],conv:[]},
+{nome:"Descomplica São Miguel",tipo:"Social",reg:"São Miguel Paulista",end:"R. Dona Ana Flora Pinheiro de Sousa, 76 - São Miguel Paulista",cep:"08060-150",tel:"(11) 2030-3726",lat:-23.4935,lng:-46.4445,hr:"Seg a Sex: 08:00–17:00",apoio:[],serv:["Serviços Públicos Digitais","Atendimento Presencial","Orientação ao Cidadão","Bilhete Único Especial"],conv:[]},
+{nome:"Descomplica Ermelino Matarazzo",tipo:"Social",reg:"Ermelino Matarazzo",end:"R. Major Otávio Tosta, 200 - Ermelino Matarazzo",cep:"03807-100",tel:"(11) 2546-5500",lat:-23.5045,lng:-46.4755,hr:"Seg a Sex: 08:00–17:00",apoio:[],serv:["Serviços Públicos Digitais","Atendimento Presencial","Orientação ao Cidadão","Bilhete Único Especial"],conv:[]},
+{nome:"Descomplica Itaim Paulista",tipo:"Social",reg:"Itaim Paulista",end:"Av. Marechal Tito, 3012 - Itaim Paulista",cep:"08160-495",tel:"156",lat:-23.4940,lng:-46.4055,hr:"Seg a Sex: 08:00–17:00",apoio:[],serv:["Serviços Públicos Digitais","Atendimento Presencial","Orientação ao Cidadão","Bilhete Único Especial","Seguro-Desemprego","Cadastro Único","SPTrans","Junta Militar"],conv:[]},
+{nome:"CREAS São Miguel Paulista",tipo:"CREAS",reg:"São Miguel Paulista",end:"R. Dr. José Guilherme Eiras, 308 - São Miguel Paulista",cep:"08010-220",tel:"(11) 2031-4459",lat:-23.4982,lng:-46.4425,hr:"Seg a Sex: 08:00–18:00",apoio:[],serv:["Proteção Social Especial","Atendimento a Vítimas de Violência","Abordagem Social","Serviço de Proteção ao Idoso","Orientação Jurídica","Medidas Protetivas","Acompanhamento Familiar"],conv:[]},
+{nome:"CREAS Itaim Paulista",tipo:"CREAS",reg:"Itaim Paulista",end:"R. Celso Barbosa de Lima, 501 - Itaim Paulista",cep:"08160-000",tel:"(11) 2156-3814",lat:-23.4895,lng:-46.4045,hr:"Seg a Sex: 08:00–18:00",apoio:[],serv:["Proteção Social Especial","Atendimento a Vítimas de Violência","Abordagem Social","Serviço de Proteção ao Idoso","Orientação Jurídica","Medidas Protetivas","Acompanhamento Familiar"],conv:[]},
+{nome:"CREAS Ermelino Matarazzo",tipo:"CREAS",reg:"Ermelino Matarazzo",end:"Av. Boturussu, 1626 - Ermelino Matarazzo",cep:"03802-010",tel:"(11) 2545-3211",lat:-23.5035,lng:-46.4740,hr:"Seg a Sex: 08:00–18:00",apoio:[],serv:["Proteção Social Especial","Atendimento a Vítimas de Violência","Abordagem Social","Serviço de Proteção ao Idoso","Orientação Jurídica","Medidas Protetivas","Acompanhamento Familiar"],conv:[]},
+{nome:"CEO III São Miguel",tipo:"CEO",reg:"São Miguel Paulista",end:"R. João Augusto de Morais, 348 - São Miguel Paulista",cep:"08010-150",tel:"(11) 2033-0511",lat:-23.4968,lng:-46.4450,hr:"Seg a Sex: 07:00–19:00",apoio:["Lab. Prótese Dentária"],serv:["Endodontia","Periodontia","Cirurgia Oral Menor","Diagnóstico de Câncer Bucal","Prótese Dentária Total","Prótese Dentária Parcial","Odontologia para Pacientes Especiais"],conv:["SUS"]},
+{nome:"CEO Itaim Paulista",tipo:"CEO",reg:"Itaim Paulista",end:"Pç. Major José Levy Sobrinho, 139 - Itaim Paulista",cep:"08160-000",tel:"(11) 2561-9443",lat:-23.4888,lng:-46.4035,hr:"Seg a Sex: 07:00–19:00",apoio:["Lab. Prótese Dentária"],serv:["Endodontia","Periodontia","Cirurgia Oral Menor","Diagnóstico de Câncer Bucal","Prótese Dentária Total","Prótese Dentária Parcial"],conv:["SUS"]},
+{nome:"CEO II Ermelino Matarazzo",tipo:"CEO",reg:"Ermelino Matarazzo",end:"R. José Góes Nogueira, 70 - Vila Paranaguá",cep:"03807-000",tel:"(11) 2544-0887",lat:-23.5065,lng:-46.4770,hr:"Seg a Sex: 07:00–19:00",apoio:[],serv:["Endodontia","Periodontia","Cirurgia Oral Menor","Diagnóstico de Câncer Bucal","Prótese Dentária Total","Prótese Dentária Parcial"],conv:["SUS"]},
+{nome:"CER IV São Miguel",tipo:"CER",reg:"São Miguel Paulista",end:"R. Prof. Antonio Gama de Cerqueira, 347 - Vila Americana",cep:"08010-130",tel:"(11) 3857-0862",lat:-23.4950,lng:-46.4465,hr:"Seg a Sex: 07:00–19:00",apoio:["Transporte Adaptado"],serv:["Reabilitação Física","Reabilitação Intelectual e Autismo","Reabilitação Visual","Reabilitação Auditiva","Fisioterapia","Terapia Ocupacional","Fonoaudiologia","Psicologia","Órteses e Próteses","Oficina Ortopédica"],conv:["SUS"]},
+{nome:"CER II Itaim Paulista",tipo:"CER",reg:"Itaim Paulista",end:"R. Crescente, 97 - Jardim Bartira",cep:"08152-080",tel:"(11) 3808-2655",lat:-23.4858,lng:-46.4098,hr:"Seg a Sex: 07:00–19:00",apoio:["Transporte Adaptado"],serv:["Reabilitação Física","Reabilitação Intelectual e Autismo","Fisioterapia","Terapia Ocupacional","Fonoaudiologia","Psicologia","Órteses e Próteses"],conv:["SUS"]},
+{nome:"CER II Ermelino Matarazzo",tipo:"CER",reg:"Ermelino Matarazzo",end:"R. Ovídio Lopes, 253 - Parque Boturussu",cep:"03804-110",tel:"(11) 2544-4107",lat:-23.5025,lng:-46.4735,hr:"Seg a Sex: 07:00–17:00",apoio:["Transporte Adaptado"],serv:["Reabilitação Física","Reabilitação Intelectual e Autismo","Fisioterapia","Terapia Ocupacional","Fonoaudiologia","Psicologia","Órteses e Próteses"],conv:["SUS"]},
+{nome:"Hospital Dia Rede Hora Certa Tito Lopes",tipo:"Hospital",reg:"São Miguel Paulista",end:"R. João Augusto de Morais, 348 - São Miguel Paulista",cep:"08010-150",tel:"(11) 2956-8122",lat:-23.4966,lng:-46.4448,hr:"Seg a Sex: 07:00–19:00",apoio:["Centro Cirúrgico","CER IV"],serv:["Cirurgias Ambulatoriais","Cinesioterapia","Eletrotermoterapia","Reabilitação","Oftalmologia","Otorrinolaringologia","Urologia","Ortopedia"],conv:["SUS Ambulatorial","SUS SADT"]},
+{nome:"INSS São Miguel Paulista",tipo:"INSS",reg:"São Miguel Paulista",end:"R. Pedro Soares de Andrade, 105 - Vila Rosária",cep:"08021-040",tel:"135",lat:-23.4955,lng:-46.4440,hr:"Seg a Sex: 07:00–17:00",apoio:[],serv:["Aposentadoria por Idade","Aposentadoria por Tempo de Contribuição","BPC/LOAS Idoso","BPC/LOAS Deficiência","Auxílio por Incapacidade","Pensão por Morte","Salário-Maternidade","Perícia Médica","Extrato de Contribuição (CNIS)"],conv:[]},
+{nome:"INSS Ermelino Matarazzo",tipo:"INSS",reg:"Ermelino Matarazzo",end:"R. Victória Simionato, 363 - Vila Paranaguá",cep:"03808-170",tel:"135",lat:-23.5055,lng:-46.4765,hr:"Seg a Sex: 07:00–17:00",apoio:[],serv:["Aposentadoria por Idade","Aposentadoria por Tempo de Contribuição","BPC/LOAS Idoso","BPC/LOAS Deficiência","Auxílio por Incapacidade","Pensão por Morte","Salário-Maternidade","Perícia Médica","Extrato de Contribuição (CNIS)"],conv:[]},
+{nome:"Subprefeitura Ermelino Matarazzo",tipo:"Social",reg:"Ermelino Matarazzo",end:"Av. São Miguel, 5550 - Ermelino Matarazzo",cep:"03804-050",tel:"(11) 2114-0333",lat:-23.5108,lng:-46.4888,hr:"Seg a Sex: 08:00–17:00",apoio:[],serv:["Serviços Públicos","Fiscalização","Zeladoria","Manutenção Urbana","Praça de Atendimento"],conv:[]},
+{nome:"Subprefeitura Itaim Paulista",tipo:"Social",reg:"Itaim Paulista",end:"Av. Marechal Tito, 3012 - Itaim Paulista",cep:"08160-495",tel:"(11) 2572-5400",lat:-23.4940,lng:-46.4055,hr:"Seg a Sex: 08:00–17:00",apoio:[],serv:["Serviços Públicos","Fiscalização","Zeladoria","Manutenção Urbana","Praça de Atendimento"],conv:[]},
+{nome:"Subprefeitura São Miguel Paulista",tipo:"Social",reg:"São Miguel Paulista",end:"R. Dona Ana Flora Pinheiro de Sousa, 76 - São Miguel Paulista",cep:"08060-150",tel:"(11) 2030-3730",lat:-23.4935,lng:-46.4445,hr:"Seg a Sex: 08:00–17:00",apoio:[],serv:["Serviços Públicos","Fiscalização","Zeladoria","Manutenção Urbana","Defesa Civil","Praça de Atendimento"],conv:[]},
+{nome:"Parque Ermelino Matarazzo – Dom Paulo Evaristo Arns",tipo:"Parque",reg:"Ermelino Matarazzo",end:"Av. Abel Tavares, 1564 - Jardim Belém",cep:"03810-110",tel:"",lat:-23.4867,lng:-46.4707,hr:"Seg a Sáb: 06:00–18:00 · Dom: 07:00–19:00",apoio:["Churrasqueiras","Equipamentos de Ginástica Acessíveis","Sanitários Acessíveis","Bosque","Telecentro"],serv:["Caminhada e Corrida","Exercícios ao Ar Livre","Churrasqueira","Lazer e Recreação","Educação Ambiental","Acessibilidade"],conv:["Gratuito"],inst:[{t:"Área",d:"50.023 m²",s:"–"},{t:"Inauguração",d:"2008",s:"–"}],extra:"Antiga casa de veraneio da família Matarazzo preservada. Abriga Telecentro e ACDEM. Bosque heterogêneo com espécies de Mata Atlântica, áreas ajardinadas e horta."},
+{nome:"Parque Vila Jacuí – Núcleo Engº Antonio Arnaldo de Queiroz e Silva",tipo:"Parque",reg:"São Miguel Paulista",end:"R. Catléias, 680 - São Miguel Paulista",cep:"08071-100",tel:"(11) 2033-1940",lat:-23.4853,lng:-46.4542,hr:"Diariamente: 07:00–18:00",apoio:["Estacionamento (178 vagas)","Quiosques com Churrasqueira","Salão de Festas","Vestiários"],serv:["Campos de Futebol","Quadras Poliesportivas","Vôlei de Praia","Pista de Skate","Pista de Caminhada e Corrida (1.632m)","Ciclovia","Academias ao Ar Livre","Lazer e Recreação"],conv:["Gratuito"],inst:[{t:"Área",d:"~170.000 m²",s:"–"},{t:"Inauguração",d:"2010",s:"–"}],extra:"Parte do complexo Parque Ecológico do Tietê. Ampla infraestrutura esportiva com campos oficiais, pista asfaltada, ciclovia e áreas para piquenique. Vegetação de Mata Atlântica com espécies frutíferas."},
+{nome:"Parque Ecológico Chico Mendes",tipo:"Parque",reg:"Itaim Paulista",end:"R. Cembira, 1201 - Vila Curuçá Velho",cep:"08032-010",tel:"(11) 2035-2270",lat:-23.5068,lng:-46.4290,hr:"Diariamente: 07:00–18:00",apoio:["Churrasqueiras","Quiosques","Sanitários","Telecentro","CECCO"],serv:["Quadras de Futebol","Pista de Cooper","Trilhas","Playground","Lazer e Recreação","Educação Ambiental"],conv:["Gratuito"],inst:[{t:"Área",d:"62.212 m²",s:"–"},{t:"Inauguração",d:"1989",s:"–"}],extra:"Homenagem ao ambientalista Chico Mendes. Possui nascentes, córrego e lago. Rica fauna com aves de Mata Atlântica, cágados, saguis e gambás. Casarão histórico para reuniões e exposições."},
+{nome:"Parque Santa Amélia",tipo:"Parque",reg:"Itaim Paulista",end:"R. Timóteo Correa de Góes, 30 - Jardim das Oliveiras",cep:"08122-490",tel:"(11) 2963-3382",lat:-23.5013,lng:-46.3738,hr:"Diariamente: 06:00–18:00",apoio:["Estacionamento","Sanitários Acessíveis","Coleta de Óleo de Cozinha"],serv:["Pista de Cooper","Quadras Poliesportivas","Minicampo de Futebol","Quadra de Vôlei","Aparelhos de Ginástica","Playground","Bosque de Leitura","Mesas para Jogos"],conv:["Gratuito"],inst:[{t:"Área",d:"25.401 m²",s:"–"},{t:"Inauguração",d:"1992",s:"–"}],extra:"Originou-se como praça e foi transformado em parque com reformulação paisagística. Possui corujas-buraqueiras e casais de saí-andorinha. Domo Geodésico disponível para atividades."},
+{nome:"Parque Chácara das Flores",tipo:"Parque",reg:"Itaim Paulista",end:"Estrada Dom João Nery, 3551 - Jardim Bartira",cep:"08452-340",tel:"",lat:-23.5234,lng:-46.3989,hr:"Diariamente: 06:00–18:00",apoio:["Galpão Coberto","Sanitários","EMIA – Escola Municipal de Iniciação Artística"],serv:["Quadra Poliesportiva","Trilhas","Pista de Cooper e Caminhada","Aparelhos de Ginástica","Playground","Pista de Skate","Lazer e Recreação","Educação Ambiental"],conv:["Gratuito"],inst:[{t:"Área",d:"41.737 m²",s:"–"},{t:"Inauguração",d:"Requalificado em 2023",s:"–"}],extra:"Preserva estruturas da antiga chácara e olaria do início do século XX. Mata Atlântica em regeneração com mais de 40 espécies como angico-vermelho, aroeira-mansa e jerivá. Investimento de R$ 4 milhões na requalificação."},
+{nome:"Parque Central do Itaim Paulista",tipo:"Parque",reg:"Itaim Paulista",end:"R. Antônio João de Medeiros, 226 - Itaim Paulista",cep:"08110-110",tel:"(11) 2156-3411",lat:-23.5043,lng:-46.4004,hr:"Diariamente: 07:00–17:00",apoio:["Biblioteca do Verde","Sanitários Acessíveis"],serv:["Trilhas para Caminhada","Playground","Aparelhos de Ginástica","Lazer e Recreação","Educação Ambiental"],conv:["Gratuito"],inst:[{t:"Área",d:"34.712 m²",s:"–"},{t:"Inauguração",d:"2013",s:"–"}],extra:"Antiga 'Chácara do Seu Antonio', última chácara existente no Itaim Paulista. Casarão preservado abriga a administração. 36 espécies de aves silvestres observadas, incluindo espécies endêmicas de Mata Atlântica."},
+{nome:"Parque Linear Mongaguá – Francisco Menegolo",tipo:"Parque",reg:"Ermelino Matarazzo",end:"R. Prof. Antônio de Castro Lopes, 1240 - Ermelino Matarazzo",cep:"03805-080",tel:"(11) 2214-1892",lat:-23.4952,lng:-46.4798,hr:"Aberto 24 horas",apoio:["Sanitários"],serv:["Caminhada e Corrida","Ciclovia","Lazer e Recreação","Exercícios ao Ar Livre"],conv:["Gratuito"],inst:[{t:"Área",d:"49.756 m²",s:"–"},{t:"Inauguração",d:"2011",s:"–"}],extra:"Parque linear ao longo de córrego canalizado. Conecta áreas verdes da região de Ermelino Matarazzo, ideal para caminhadas e ciclismo."},
+{nome:"Parque Linear Água Vermelha",tipo:"Parque",reg:"São Miguel Paulista",end:"Av. Marechal Tito, 2924 - São Miguel Paulista",cep:"08115-100",tel:"(11) 2561-5654",lat:-23.4940,lng:-46.4181,hr:"Aberto 24 horas",apoio:[],serv:["Caminhada","Ciclovia","Passagem de Pedestres","Lazer e Recreação"],conv:["Gratuito"],inst:[{t:"Inauguração",d:"Implantado como parque linear",s:"–"}],extra:"Parque linear às margens do córrego Água Vermelha, próximo à Subprefeitura de Itaim Paulista. Contribui com a drenagem urbana e oferece passagem de pedestres entre bairros."},
+{nome:"Praça Fortunato da Silveira (Morumbizinho)",tipo:"Parque",reg:"São Miguel Paulista",end:"Praça Fortunato da Silveira - Vila Jacuí",cep:"08060-110",tel:"",lat:-23.4986,lng:-46.4520,hr:"Aberto 24 horas",apoio:["Playground","Iluminação"],serv:["Lazer e Recreação","Playground","Convivência Comunitária","Exercícios ao Ar Livre"],conv:["Gratuito"],inst:[{t:"Avaliação",d:"4,6 ★ (858 avaliações)",s:"–"}],extra:"Conhecida como 'Pracinha do Morumbizinho', é um dos espaços de convivência mais populares da Vila Jacuí, com playground e área para lazer ao ar livre."},
+{nome:"Parque Municipal Jardim Primavera",tipo:"Parque",reg:"São Miguel Paulista",end:"R. Perpétua-do-Campo, 481 - Jardim Pedro José Nunes",cep:"08061-000",tel:"",lat:-23.5015,lng:-46.4602,hr:"Diariamente: 06:00–18:00",apoio:["Quiosques","Sanitários"],serv:["Playground","Lazer e Recreação","Área Verde"],conv:["Gratuito"],inst:[{t:"Inauguração",d:"Parque Municipal",s:"–"}],extra:"Parque de bairro com quiosques e playground. Área verde na divisa entre Vila Jacuí e Jardim Pedro José Nunes."},
+{nome:"Parque Linear Itaim Paulista",tipo:"Parque",reg:"Itaim Paulista",end:"Av. Marechal Tito (altura do nº 7455) - Jardim das Oliveiras",cep:"08115-100",tel:"",lat:-23.4870,lng:-46.3830,hr:"Aberto 24 horas",apoio:["Sanitários"],serv:["Pista de Skate","Quadra Poliesportiva","Playground","Caminhada","Lazer e Recreação"],conv:["Gratuito"],inst:[{t:"Área",d:"68.154 m²",s:"–"},{t:"Extensão",d:"3,5 km ao longo do Córrego Itaim",s:"–"},{t:"Inauguração",d:"2009",s:"–"}],extra:"Parque linear de 3,5 km às margens do Córrego Itaim, contribuindo com a drenagem urbana. Flora inclui espécies em risco de extinção como cedro e pinheiro-do-paraná. Fauna urbana com bem-te-vi, cambacica e sanhaçu-cinzento."},
+{nome:"Parque Ecológico do Tietê – Núcleo Itaim Biacica",tipo:"Parque",reg:"Itaim Paulista",end:"Estr. da Biacica, 756 - Vila Seabra",cep:"08180-370",tel:"(11) 2823-2426",lat:-23.4881,lng:-46.4060,hr:"Diariamente: 07:00–18:00",apoio:["Quiosques com Churrasqueira","Sanitários","Centro de Educação Ambiental"],serv:["Trilhas","Campos de Futebol","Quadras Poliesportivas","Playground","Lazer e Recreação","Educação Ambiental","Ciclovia"],conv:["Gratuito"],inst:[{t:"Avaliação",d:"4,5 ★ (2.325 avaliações)",s:"–"}],extra:"Núcleo do Parque Ecológico do Tietê no extremo leste. Ampla área verde na várzea do Rio Tietê com infraestrutura completa para esportes e lazer. Centro de educação ambiental e contato direto com a natureza."}
+];
+
+const COR={Instituto:"#c62828",Hospital:"#e53935",UPA:"#ff5722","AMA/UBS":"#0288d1",CAPS:"#7b1fa2",UBS:"#1565c0",CEO:"#00897b",CER:"#5c6bc0",CEU:"#00695c",CRAS:"#e65100",CREAS:"#d84315",CCI:"#ad1457",INSS:"#37474f","Alimentação":"#f57f17",Cultura:"#2e7d32",Social:"#00838f",Parque:"#388e3c"};
+const ICO={Instituto:"🏥",Hospital:"🏨",UPA:"🚨","AMA/UBS":"🚑",CAPS:"🧠",UBS:"🩺",CEO:"🦷",CER:"♿",CEU:"🎭",CRAS:"🤲",CREAS:"🛡️",CCI:"👴",INSS:"🏛️","Alimentação":"🍽️",Cultura:"📚",Social:"🤝",Parque:"🌳"};
+
+let uC=null,tR=null,fT="Todos",fS="",fR="Todas",pag=1;
+const PP=10;
+
+function dK(a,b,c,d){const R=6371,x=(c-a)*Math.PI/180,y=(d-b)*Math.PI/180,z=Math.sin(x/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(y/2)**2;return R*2*Math.atan2(Math.sqrt(z),Math.sqrt(1-z))}
+function sE(m){const e=document.getElementById("erro");e.textContent=m;e.classList.add("sh")}
+function cE(){document.getElementById("erro").classList.remove("sh")}
+
+function mkRota(p){
+  var destTxt=p.end+", São Paulo, SP, Brasil";
+  if(p.cep) destTxt=p.end+", CEP "+p.cep+", São Paulo, SP, Brasil";
+  var dest=encodeURIComponent(destTxt);
+  if(uC){
+    var orig=uC.lat+","+uC.lng;
+    return "https://www.google.com/maps/dir/?api=1&origin="+orig+"&destination="+dest;
+  }
+  return "https://www.google.com/maps/dir/?api=1&destination="+dest;
+}
+
+function mkWhats(p){
+  var txt="Olha este local: *"+p.nome+"*\n📍 "+p.end+"\n📞 "+(p.tel||"Sem telefone")+"\n🕐 "+(p.hr||"")+"\n\nEncontrado no Buscador IPGG";
+  return "https://wa.me/?text="+encodeURIComponent(txt);
+}
+
+function updStats(){
+  const e=document.getElementById("stats");
+  const regs=[...new Set(P.map(p=>p.reg))];
+  const saude=P.filter(p=>["UBS","AMA/UBS","Hospital","Instituto","CAPS","UPA","CEO","CER"].includes(p.tipo)).length;
+  e.innerHTML=`<div class="stat"><b>${P.length}</b> Serviços</div><div class="stat"><b>${saude}</b> Área Saúde</div>`;
+}
+updStats();
+
+function calc(lat,lng){uC={lat,lng};tR=P.map((p,idx)=>({...p,_idx:idx,dist:dK(lat,lng,p.lat,p.lng)})).sort((a,b)=>a.dist-b.dist);fT="Todos";fS="";fR="Todas";pag=1;rReg();rF();rSF();rR();document.getElementById("footer").classList.add("sh")}
+
+function rReg(){
+  const e=document.getElementById("regioes");
+  const regs=["Todas",...new Set(P.map(p=>p.reg))];
+  e.innerHTML=regs.map(r=>{
+    const on=fR===r;
+    const n=r==="Todas"?tR.length:tR.filter(x=>x.reg===r).length;
+    return`<button class="rg-b ${on?'on':''}" onclick="sR('${r}')">📍 ${r} (${n})</button>`;
+  }).join("");
+  e.classList.add("sh");
+}
+
+function sR(r){pag=1;fR=r;rReg();rF();rR()}
+
+function rF(){const e=document.getElementById("filtros"),ts=["Todos",...new Set(P.map(p=>p.tipo))];e.innerHTML=ts.map(t=>{const on=fT===t,c=COR[t]||"#1565c0",ic=ICO[t]||"";
+const n=t==="Todos"?gBase().length:gBase().filter(r=>r.tipo===t).length;
+return`<button class="fb ${on?'on':''}" style="${on?'background:'+c:''}" onclick="sF('${t}')">${ic} ${t} (${n})</button>`}).join("");e.classList.add("sh")}
+
+function rSF(){const e=document.getElementById("sfilt"),s=document.getElementById("ssel"),all=new Set();tR.forEach(p=>(p.serv||[]).forEach(x=>all.add(x)));s.innerHTML='<option value="">Todos os serviços</option>'+[...all].sort().map(x=>`<option value="${x}">${x}</option>`).join("");e.classList.add("sh")}
+
+function sF(t){pag=1;fT=t;rF();rR()}
+function filtS(){pag=1;fS=document.getElementById("ssel").value;rR()}
+
+function gBase(){let l=tR;if(fR!=="Todas")l=l.filter(r=>r.reg===fR);return l}
+function gL(){let l=gBase();if(fT!=="Todos")l=l.filter(r=>r.tipo===fT);if(fS)l=l.filter(r=>(r.serv||[]).includes(fS));return l}
+
+function rR(){const l=gL(),e=document.getElementById("res"),rc=document.getElementById("rc");
+if(!l.length){rc.innerHTML="";e.innerHTML='<div style="text-align:center;padding:30px;color:#64748b;font-size:13px">Nenhuma unidade encontrada com esse filtro.</div>';return}
+const totalPag=Math.ceil(l.length/PP);
+if(pag>totalPag)pag=1;
+const ini=(pag-1)*PP,fim=ini+PP,lp=l.slice(ini,fim);
+rc.innerHTML=`Mostrando <span>${ini+1}–${Math.min(fim,l.length)}</span> de ${l.length} pontos · Página <span>${pag}</span> de ${totalPag}`;
+e.innerHTML=lp.map((p,i)=>{const idxGlobal=ini+i;const c=COR[p.tipo]||"#64748b",ic=ICO[p.tipo]||"📍",p1=idxGlobal===0&&fT==="Todos"&&!fS&&fR==="Todas";
+const rt=mkRota(p);const wt=mkWhats(p);
+const tb=p.tel?`<a class="bt" href="tel:${p.tel.replace(/\D/g,"")}">${p.tel}</a>`:"";
+const td=p.serv&&p.serv.length>0;
+const sb=td?`<span class="bs" onclick="oD(${p._idx})">ℹ️ Detalhes</span>`:"";
+const sp=td?`<div class="csp">🔬 ${p.serv.slice(0,3).join(" · ")}${p.serv.length>3?" +"+(p.serv.length-3)+" mais":""}</div>`:"";
+const hr=p.hr?`<div class="ch">🕐 ${p.hr}</div>`:"";
+return`<div class="cd ${p1?'p1':''}"><div class="bp">MAIS PRÓXIMO</div><div class="ci"><div class="ck" style="background:${c}18">${ic}</div><div class="cb"><div class="cm"><span class="ct2" style="background:${c}30;color:${c}">${p.tipo}</span><span class="dst">${p.dist.toFixed(1)} km</span></div><div class="cn">${p.nome}</div><div class="ce">${p.end}</div><div class="creg">📍 ${p.reg}</div>${hr}${sp}<div class="cbt"><a class="bm" href="${rt}" target="_blank">🗺️ Rota</a>${tb}<a class="bw" href="${wt}" target="_blank">📱 Enviar</a>${sb}</div></div></div></div>`}).join("");
+if(totalPag>1){
+  let pgHtml='<div class="pgn">';
+  pgHtml+=`<button class="pgb" ${pag===1?'disabled':''} onclick="mudaPag(${pag-1})">← Anterior</button>`;
+  pgHtml+=`<span class="pginfo">${pag} / ${totalPag}</span>`;
+  pgHtml+=`<button class="pgb" ${pag===totalPag?'disabled':''} onclick="mudaPag(${pag+1})">Próxima →</button>`;
+  pgHtml+='</div>';
+  e.innerHTML+=pgHtml;
+}}
+
+function mudaPag(n){pag=n;rR();window.scrollTo({top:document.querySelector(".sb").offsetTop-10,behavior:"smooth"})}
+
+function oD(idx){const p=P[idx],c=COR[p.tipo]||"#64748b",ic=ICO[p.tipo]||"📍";
+const rt=mkRota(p);const wt=mkWhats(p);
+let h=`<div class="dt-hd" style="background:linear-gradient(135deg,${c}15,${c}08)"><button class="dt-x" onclick="fD()">&times;</button><div style="font-size:26px;margin-bottom:8px">${ic}</div><div class="dt-nm">${p.nome}</div><span class="dt-bd" style="background:${c}30;color:${c}">${p.tipo}</span><span class="dt-bd" style="background:#1e293b;color:#b39ddb;margin-left:4px">📍 ${p.reg}</span></div><div class="dt-info">`;
+h+=`<div class="dt-sec"><div class="dt-st">📋 Informações Gerais</div>`;
+h+=`<div class="dt-row"><div class="dt-ri">📍</div><div class="dt-rt"><span class="dt-rl">Endereço:</span> ${p.end}${p.cep?" – CEP "+p.cep:""}</div></div>`;
+if(p.tel)h+=`<div class="dt-row"><div class="dt-ri">📞</div><div class="dt-rt"><span class="dt-rl">Telefone:</span> <a href="tel:${p.tel.replace(/\D/g,"")}" style="color:#81c784;text-decoration:none">${p.tel}</a></div></div>`;
+if(p.hr)h+=`<div class="dt-row"><div class="dt-ri">🕐</div><div class="dt-rt"><span class="dt-rl">Horário:</span> ${p.hr}</div></div>`;
+if(uC){const dist=dK(uC.lat,uC.lng,p.lat,p.lng);h+=`<div class="dt-row"><div class="dt-ri">📏</div><div class="dt-rt"><span class="dt-rl">Distância:</span> ${dist.toFixed(1)} km (linha reta)</div></div>`}
+h+=`</div>`;
+if(p.serv&&p.serv.length)h+=`<div class="dt-sec"><div class="dt-st">🔬 Serviços</div><div class="dt-tags">${p.serv.map(s=>`<span class="dt-tag h">${s}</span>`).join("")}</div></div>`;
+if(p.apoio&&p.apoio.length)h+=`<div class="dt-sec"><div class="dt-st">🏗️ Apoio</div><div class="dt-tags">${p.apoio.map(s=>`<span class="dt-tag">${s}</span>`).join("")}</div></div>`;
+if(p.conv&&p.conv.length)h+=`<div class="dt-sec"><div class="dt-st">🏥 Convênios</div><div class="dt-tags">${p.conv.map(s=>`<span class="dt-tag">${s}</span>`).join("")}</div></div>`;
+if(p.inst&&p.inst.length)h+=`<div class="dt-sec"><div class="dt-st">🏢 Instalações</div><table class="dt-tbl"><tr><th>Tipo</th><th>Descrição</th><th>Qtde</th></tr>${p.inst.map(i=>`<tr><td>${i.t}</td><td>${i.d}</td><td>${i.s}</td></tr>`).join("")}</table></div>`;
+if(p.extra)h+=`<div class="dt-sec"><div class="dt-st">✨ Extras</div><div class="dt-rt" style="font-size:12px;line-height:1.5;color:#94a3b8">${p.extra}</div></div>`;
+h+=`</div><div class="dt-act"><a href="${rt}" target="_blank" style="background:#1a237e;color:#fff">🗺️ Rota</a>`;
+if(p.tel)h+=`<a href="tel:${p.tel.replace(/\D/g,"")}" style="background:#1b5e20;color:#81c784;border:1px solid #2e7d32">📞 Ligar</a>`;
+h+=`<a href="${wt}" target="_blank" style="background:#075e25;color:#25d366;border:1px solid #25d366">📱 Enviar</a>`;
+h+=`</div>`;document.getElementById("dt").innerHTML=h;document.getElementById("ov").classList.add("sh");document.body.style.overflow="hidden"}
+
+function fD(){document.getElementById("ov").classList.remove("sh");document.body.style.overflow=""}
+
+function usarGPS(){if(!navigator.geolocation){sE("GPS não disponível.");return}const btn=document.querySelector(".bg-mob");btn.disabled=true;btn.textContent="📍 Localizando...";cE();navigator.geolocation.getCurrentPosition(p=>{const f=document.getElementById("found");f.textContent="📍 Localização obtida via GPS";f.classList.add("sh");calc(p.coords.latitude,p.coords.longitude);btn.disabled=false;btn.textContent="📍 USAR MINHA LOCALIZAÇÃO (GPS)"},()=>{sE("Não foi possível obter localização. Verifique as permissões de GPS.");btn.disabled=false;btn.textContent="📍 USAR MINHA LOCALIZAÇÃO (GPS)"},{enableHighAccuracy:true,timeout:10000})}
+
+document.addEventListener("keydown",e=>{if(e.key==="Escape")fD()});
+
+// Botão voltar ao topo
+const topBtn=document.createElement("button");
+topBtn.id="topBtn";
+topBtn.innerHTML="⬆";
+topBtn.onclick=()=>window.scrollTo({top:0,behavior:"smooth"});
+document.body.appendChild(topBtn);
+window.addEventListener("scroll",()=>{topBtn.style.display=window.scrollY>400?"flex":"none"});
+// Registrar Service Worker (PWA)
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('./sw.js').then(()=>console.log('SW ok')).catch(e=>console.log('SW erro',e));
+}
+</script>
+</body>
+</html>
