@@ -36,9 +36,11 @@ body{background:var(--bg);color:var(--t);font-family:var(--font);font-size:16px;
 #addrMsg{font-size:13px;flex-shrink:0;max-width:240px}
 #addrMsg.ok{color:var(--green)}
 #addrMsg.err{color:var(--red)}
-#chips{margin-left:auto;display:flex;gap:5px;flex-shrink:0}
+#chips{display:flex;gap:5px;flex-shrink:0}
 .chip{font-size:15px;color:var(--t2);background:var(--bg);border:1px solid var(--b);border-radius:6px;padding:5px 12px}
 .chip b{color:var(--ac)}
+#backIpggBtn{font-size:14px;font-weight:600;color:var(--ac);background:var(--acbg);border:1px solid rgba(88,166,255,.3);border-radius:6px;padding:7px 14px;text-decoration:none;white-space:nowrap;flex-shrink:0;transition:background .15s,border-color .15s}
+#backIpggBtn:hover{background:rgba(88,166,255,.16);border-color:var(--bhi)}
 /* LAYOUT */
 #layout{display:flex;flex:1;overflow:hidden}
 /* SIDEBAR */
@@ -160,7 +162,10 @@ body{background:var(--bg);color:var(--t);font-family:var(--font);font-size:16px;
   <div id="topbar-title">
     <div class="logo">&#x1F3E5;</div>
     <div class="brand"><b>Rede de Suporte ao Idoso</b><small>Instituto Paulista de Geriatria e Gerontologia</small></div>
-    <div id="chips" style="margin-left:auto"></div>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:14px">
+      <div id="chips"></div>
+      <a href="https://www.saude.sp.gov.br/instituto-paulista-de-geriatria-e-gerontologia-ipgg-jose-ermirio-de-moraes/" target="_blank" id="backIpggBtn">&#x2190; Voltar para o site do IPGG</a>
+    </div>
   </div>
   <div id="topbar-search">
     <div id="addrWrap" style="position:relative"><span>&#x1F4CD;</span><input id="addrIn" type="text" placeholder="BAIRRO, ENDERE&Ccedil;O OU CEP..." autocomplete="off"><div id="addrDrop"></div></div>
