@@ -1049,6 +1049,16 @@ body{
   }
   html{scroll-behavior:auto}
 }
+/* FARMACIA */
+.cfarm{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:800;color:#3fb950;background:rgba(63,185,80,.14);border:1px solid rgba(63,185,80,.35);border-radius:20px;padding:2px 8px;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
+.fb.farm{color:#3fb950;border-color:rgba(63,185,80,.4)}
+.fb.farm.on{background:#3fb950;border:none;color:#0a0f1a}
+.dt-bd.farm{background:rgba(63,185,80,.18);color:#3fb950}
+.sf-row{display:flex;gap:8px;align-items:stretch}
+.sf-row select{flex:1;width:auto;min-width:0}
+.sf-row .bg{min-height:48px;min-width:48px;padding:0 14px;flex-shrink:0}
+.medlink{display:block;text-align:center;margin:2px 0 10px;padding:11px;background:rgba(63,185,80,.1);border:1px solid rgba(63,185,80,.3);border-radius:12px;color:#3fb950;text-decoration:none;font-size:13px;font-weight:700}
+.medlink:active{background:rgba(63,185,80,.2)}
 </style>
 </head>
 <body>
@@ -1056,9 +1066,9 @@ body{
 <!-- HEADER -->
 <div class="hd">
   <div class="hd-in">
-    <div class="hd-tag">IPGG - Rede de Suporte à Pessoa Idosa</div>
+    <div class="hd-tag">IPGG – Rede de Suporte ao Idoso</div>
     <div class="hd-t">Encontre o Serviço Mais Próximo</div>
-    <div class="hd-s">Zona Leste</div>
+    <div class="hd-s">São Miguel · Itaim Paulista · Ermelino Matarazzo</div>
     <div class="stats" id="stats"></div>
   </div>
 </div>
@@ -1072,8 +1082,8 @@ body{
       <div class="ac-list" id="acList"></div>
     </div>
     <div class="br">
-      <button class="bb" id="btnB" onclick="buscar()">🔍 BUSCAR</button>
-      <button class="bg" onclick="usarGPS()" aria-label="Usar GPS">📍</button>
+      <button class="bb" id="btnB" onclick="usarGPS()">📍 USAR MINHA LOCALIZAÇÃO</button>
+      <button class="bg" id="btnMic" onclick="voz()" aria-label="Busca por voz">🎤</button>
     </div>
     <div class="er" id="erro"></div>
     <div class="fa" id="found"></div>
@@ -1081,13 +1091,17 @@ body{
 
   <div class="rg" id="regioes"></div>
   <div class="swipe-hint" id="swipeHint" style="display:none">deslize para ver mais →</div>
+  <a class="medlink" href="https://smsprefeiturasp.com.br/remedionahora/" target="_blank" rel="noopener">💊 Consultar estoque de remédio · Remédio na Hora ↗</a>
   <div class="fl" id="filtros"></div>
 
   <div class="sf" id="sfilt">
     <label class="sf-l">🔬 Filtrar por serviço:</label>
-    <select id="ssel" onchange="filtS()">
-      <option value="">Todos os Serviços</option>
-    </select>
+    <div class="sf-row">
+      <select id="ssel" onchange="filtS()">
+        <option value="">Todos os Serviços</option>
+      </select>
+      <button class="bg" id="btnMicServ" onclick="vozServ()" aria-label="Filtrar serviço por voz">🎤</button>
+    </div>
   </div>
 
   <div class="rc" id="rc"></div>
@@ -1108,7 +1122,7 @@ body{
 
 <script>
 const P=[
-{nome:"IPGG – Inst. Paulista de Geriatria e Gerontologia",tipo:"Instituto",reg:"São Miguel Paulista",end:"Pç. Pe. Aleixo Monteiro Mafra, 34 - São Miguel Paulista",cep:"08011-010",tel:"(11) 2030-4000",lat:-23.4962,lng:-46.4451,hr:"Seg a Sex: 07:00–17:00",apoio:["Diagnóstico por Imagem (FIDI)","Assistência Farmacêutica","Lab. Próteses Dentárias","Biblioteca Especializada"],serv:["Geriatria e Gerontologia","Clínica Médica","Enfermagem","Saúde Bucal","Fisioterapia Gerontológica","Reabilitação Física e Psicossocial","Nutrição","Fonoaudiologia","Psicologia","Serviço Social","Educação Física","Atendimento Domiciliar","Raio-X Digital","Ultrassom","Tomografia Computadorizada","Mamografia","Densitometria Óssea"],conv:["SUS"],inst:[{t:"Imagem",d:"~3.350 exames/mês",s:"–"},{t:"Geral",d:"40 mil prontuários ativos",s:"–"},{t:"Geral",d:"6.000+ idosos/mês",s:"–"}],extra:"Aulas de violão/canto, alfabetização, inclusão digital, oficinas culturais, manicure, cabeleireiro, podologia, bailes, passeios culturais, esportes adaptados. Centro de ensino e pesquisa com pós-graduação em Gerontologia."},
+{nome:"IPGG – Inst. Paulista de Geriatria e Gerontologia",tipo:"Instituto",reg:"São Miguel Paulista",end:"Pç. Pe. Aleixo Monteiro Mafra, 34 - São Miguel Paulista",cep:"08011-010",tel:"(11) 2030-4000",lat:-23.4962,lng:-46.4451,hr:"Seg a Sex: 07:00–17:00",apoio:["Diagnóstico por Imagem (FIDI)","Assistência Farmacêutica","Lab. Próteses Dentárias","Biblioteca Especializada"],serv:["Geriatria e Gerontologia","Clínica Médica","Enfermagem","Saúde Bucal","Fisioterapia Gerontológica","Reabilitação Física e Psicossocial","Nutrição","Fonoaudiologia","Psicologia","Serviço Social","Educação Física","Atendimento Domiciliar","Raio-X Digital","Ultrassom","Tomografia Computadorizada","Mamografia","Densitometria Óssea"],conv:["SUS"],inst:[{t:"Imagem",d:"~3.350 exames/mês",s:"–"},{t:"Geral",d:"40 mil prontuários ativos",s:"–"},{t:"Geral",d:"6.000+ idosos/mês",s:"–"}],extra:"Aulas de violão/canto, alfabetização, inclusão digital, oficinas culturais, manicure, cabeleireiro, podologia, bailes, passeios culturais, esportes adaptados. Centro de ensino e pesquisa com pós-graduação em Gerontologia. ⚠️ Observação: a farmácia do IPGG dispensa medicamentos apenas para receitas do próprio IPGG — não fornece para a rede."},
 {nome:"Hospital Municipal Tide Setúbal",tipo:"Hospital",reg:"São Miguel Paulista",end:"R. Dr. José Guilherme Eiras, 123 - São Miguel Paulista",cep:"08010-220",tel:"(11) 5178-1250",lat:-23.4985,lng:-46.4420,hr:"24 horas",apoio:["Ambulância","Farmácia","Laboratório","Banco de Sangue","Diagnóstico por Imagem"],serv:["Pronto-Socorro Adulto","Pronto-Socorro Pediátrico","Cirurgia Geral","Clínica Médica","Pediatria","Ginecologia","Obstetrícia/Maternidade","Ortopedia","Anestesia","Psiquiatria","Neuroclínica","UTI Adulto","UTI Neonatal","Berçário","Raio-X","Ultrassom","Ressonância","Laboratório","Endoscopia","Eletrocardiografia","PEP"],conv:["SUS Ambulatorial","SUS Internação","SUS SADT","SUS Urgência"],inst:[{t:"Internação",d:"200 leitos totais",s:200},{t:"PS",d:"240 mil atend./ano",s:"–"},{t:"Internação",d:"10 mil internações/ano",s:"–"}]},
 {nome:"Hospital Geral de Itaim Paulista",tipo:"Hospital",reg:"Itaim Paulista",end:"Av. Marechal Tito, 6035 - Itaim Paulista",cep:"08115-100",tel:"(11) 2563-6300",lat:-23.4905,lng:-46.3970,hr:"24 horas",apoio:["Ambulância","Farmácia","Laboratório","Diagnóstico por Imagem"],serv:["Pronto-Socorro Adulto","Pronto-Socorro Pediátrico","Clínica Médica","Clínica Cirúrgica","Pediatria","Ginecologia","Obstetrícia/Maternidade","Ortopedia","Psiquiatria","UTI Adulto","UTI Neonatal","Raio-X","Ressonância Magnética","Laboratório","Endoscopia","Eletrocardiografia","Ambulatório Cirúrgico de Especialidades"],conv:["SUS Ambulatorial","SUS Internação","SUS SADT","SUS Urgência"],inst:[{t:"Internação",d:"301 leitos totais",s:301},{t:"UTI",d:"10 leitos UTI Adulto + 16 UTI Neonatal",s:26},{t:"PS",d:"~10 mil atend./mês",s:"–"}]},
 {nome:"Hospital Municipal Prof. Dr. Alípio Corrêa Netto",tipo:"Hospital",reg:"Ermelino Matarazzo",end:"Al. Rodrigo de Brum, 1989 - Vila Paranaguá",cep:"03807-230",tel:"(11) 2943-9944",lat:-23.5095,lng:-46.4750,hr:"24 horas",apoio:["Ambulância","Farmácia","Laboratório","Diagnóstico por Imagem"],serv:["Pronto-Socorro Adulto","Pronto-Socorro Pediátrico","Cirurgia Geral","Clínica Médica","Pediatria","Ginecologia","Obstetrícia/Maternidade","Ortopedia","UTI Adulto","UTI Neonatal","Raio-X","Ultrassom","Laboratório","Eletrocardiografia"],conv:["SUS Ambulatorial","SUS Internação","SUS SADT","SUS Urgência"]},
@@ -1369,9 +1383,17 @@ const P=[
 const COR={Instituto:"#c62828",Hospital:"#e53935",UPA:"#ff5722","AMA/UBS":"#0288d1",CAPS:"#7b1fa2",UBS:"#1565c0",CEO:"#00897b",CER:"#5c6bc0",CEU:"#00695c",CRAS:"#e65100",CREAS:"#d84315",CCI:"#ad1457",INSS:"#37474f","Alimentação":"#f57f17",Cultura:"#2e7d32",Social:"#00838f",NCI:"#d946ef",Parque:"#10b981",STS:"#0891b2",PAI:"#f59e0b",CAPD:"#8b5cf6"};
 const ICO={Instituto:"🏥",Hospital:"🏨",UPA:"🚨","AMA/UBS":"🚑",CAPS:"🧠",UBS:"🩺",CEO:"🦷",CER:"♿",CEU:"🎭",CRAS:"🤲",CREAS:"🛡️",CCI:"👴",INSS:"🏛️","Alimentação":"🍽️",Cultura:"📚",Social:"🤝",NCI:"👥",Parque:"🌳",STS:"📋",PAI:"🚪",CAPD:"♿"};
 
-let uC=null,tR=null,fT="Todos",fS="",fR="Todas",pag=1;
+let uC=null,tR=null,fT="Todos",fS="",fR="Todas",pag=1,fFarm=false;
 const PP=8; // Menos itens por página no mobile
 
+const SUP7=["Sao Miguel Paulista","Itaim Paulista","Ermelino Matarazzo","Itaquera","Guaianases","Sao Mateus","Cidade Tiradentes"];
+function fN(s){return (s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();}
+function inSup7(reg){const r=fN(reg);return SUP7.some(s=>fN(s)===r);}
+function temFarmacia(p){return (p.apoio||[]).some(x=>fN(x).includes("farmac"))||(p.serv||[]).some(x=>{const n=fN(x);return n.includes("dispensacao de medicamento")||n.includes("assistencia farmaceutica");});}
+// Escopo do pin Farmacia: true = so as 7 supervisoes; false = todos com dispensacao
+const FARM_APENAS_7SUP=true;
+function farmMun(p){return temFarmacia(p)&&(!FARM_APENAS_7SUP||inSup7(p.reg));}
+const URL_REMEDIO_HORA="https://smsprefeiturasp.com.br/remedionahora/";
 function dK(a,b,c,d){const R=6371,x=(c-a)*Math.PI/180,y=(d-b)*Math.PI/180,z=Math.sin(x/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(y/2)**2;return R*2*Math.atan2(Math.sqrt(z),Math.sqrt(1-z))}
 function sE(m){const e=document.getElementById("erro");e.textContent=m;e.classList.add("sh")}
 function cE(){document.getElementById("erro").classList.remove("sh")}
@@ -1397,7 +1419,7 @@ function mkWhats(p){
 function updStats(){
   const e=document.getElementById("stats");
   const saude=P.filter(p=>["UBS","AMA/UBS","Hospital","Instituto","CAPS","UPA","CEO","CER","PAI","CAPD"].includes(p.tipo)).length;
-  e.innerHTML=`<div class="stat"><b>${P.length}</b> Serviços</div><div class="stat"><b>${saude}</b> Saúde</div>`;
+  e.innerHTML=`<div class="stat"><b>${P.length}</b> Serviços</div><div class="stat"><b>${saude}</b> Saúde</div><div class="stat"><b>${P.filter(farmMun).length}</b> Farmácia</div>`;
 }
 updStats();
 
@@ -1416,17 +1438,18 @@ function rReg(){
 
 function sR(r){pag=1;fR=r;rReg();rF();rR()}
 
-function rF(){const e=document.getElementById("filtros"),ts=["Todos",...new Set(P.map(p=>p.tipo))];e.innerHTML=ts.map(t=>{const on=fT===t,c=COR[t]||"#1565c0",ic=ICO[t]||"";
+function rF(){const e=document.getElementById("filtros");let ts=[...new Set(P.map(p=>p.tipo)),"Farmácia"].sort((a,b)=>a.localeCompare(b,"pt-BR"));ts.unshift("Todos");e.innerHTML=ts.map(t=>{if(t==="Farmácia"){const nf=gBase().filter(farmMun).length;return`<button class="fb farm ${fFarm?'on':''}" onclick="sFarm()">💊 Farmácia (${nf})</button>`}const on=fT===t&&!fFarm,c=COR[t]||"#1565c0",ic=ICO[t]||"";
 const n=t==="Todos"?gBase().length:gBase().filter(r=>r.tipo===t).length;
-return`<button class="fb ${on?'on':''}" style="${on?'background:'+c:''}" onclick="sF('${t}')">${ic} ${t} (${n})</button>`}).join("");e.classList.add("sh")}
+const st=on?`background:${c};border-color:${c};color:#fff`:(t==="Todos"?"":`color:${c};border-color:${c}66`);return`<button class="fb ${on?'on':''}" style="${st}" onclick="sF('${t}')">${ic} ${t} (${n})</button>`}).join("");e.classList.add("sh")}
 
-function rSF(){const e=document.getElementById("sfilt"),s=document.getElementById("ssel"),all=new Set();tR.forEach(p=>(p.serv||[]).forEach(x=>all.add(x)));s.innerHTML='<option value="">Todos os serviços</option>'+[...all].sort().map(x=>`<option value="${x}">${x}</option>`).join("");e.classList.add("sh")}
+function rSF(){const e=document.getElementById("sfilt"),s=document.getElementById("ssel"),all=new Set();tR.forEach(p=>(p.serv||[]).forEach(x=>all.add(x)));s.innerHTML='<option value="">Todos os serviços</option><option value="💊 Farmácia">💊 Farmácia</option>'+[...all].sort().map(x=>`<option value="${x}">${x}</option>`).join("");e.classList.add("sh")}
 
-function sF(t){pag=1;fT=t;rF();rR()}
-function filtS(){pag=1;fS=document.getElementById("ssel").value;rR()}
+function sF(t){pag=1;fT=t;fFarm=false;rF();rR()}
+function filtS(){pag=1;fFarm=false;fS=document.getElementById("ssel").value;rF();rR()}
+function sFarm(){pag=1;fFarm=true;fT="Todos";fS="";const ss=document.getElementById("ssel");if(ss)ss.value="";rF();rR()}
 
 function gBase(){let l=tR;if(fR!=="Todas")l=l.filter(r=>r.reg===fR);return l}
-function gL(){let l=gBase();if(fT!=="Todos")l=l.filter(r=>r.tipo===fT);if(fS)l=l.filter(r=>(r.serv||[]).includes(fS));return l}
+function gL(){let l=gBase();if(fFarm||fS==="💊 Farmácia")return l.filter(r=>farmMun(r)||r.tipo==="Farmacia Popular");if(fT!=="Todos")l=l.filter(r=>r.tipo===fT);if(fS)l=l.filter(r=>(r.serv||[]).includes(fS));return l}
 
 function rR(){const l=gL(),e=document.getElementById("res"),rc=document.getElementById("rc");
 if(!l.length){rc.innerHTML="";e.innerHTML='<div style="text-align:center;padding:40px 20px;color:#64748b;font-size:15px">Nenhuma unidade encontrada.</div>';return}
@@ -1441,7 +1464,7 @@ const td=p.serv&&p.serv.length>0;
 const sb=td?`<span class="bs" onclick="oD(${p._idx})">ℹ️ Detalhes</span>`:"";
 const sp=td?`<div class="csp">🔬 ${p.serv.slice(0,2).join(" · ")}${p.serv.length>2?" +"+(p.serv.length-2)+" mais":""}</div>`:"";
 const hr=p.hr?`<div class="ch">🕐 ${p.hr}</div>`:"";
-return`<div class="cd ${p1?'p1':''}"><div class="bp">⭐ MAIS PRÓXIMO</div><div class="ci"><div class="ck" style="background:${c}18">${ic}</div><div class="cb"><div class="cm"><span class="ct2" style="background:${c}30;color:${c}">${p.tipo}</span><span class="dst">${p.dist.toFixed(1)} km</span></div><div class="cn">${p.nome}</div><div class="ce">${p.end}</div><div class="creg">📍 ${p.reg}</div>${hr}${sp}<div class="cbt"><a class="bm" href="${rt}" target="_blank">🗺️ Rota</a>${tb}<a class="bw" href="${wt}" target="_blank">📱 Enviar</a>${sb}</div></div></div></div>`}).join("");
+return`<div class="cd ${p1?'p1':''}"><div class="bp">⭐ MAIS PRÓXIMO</div><div class="ci"><div class="ck" style="background:${c}18">${ic}</div><div class="cb"><div class="cm"><span class="ct2" style="background:${c}30;color:${c}">${p.tipo}</span><span class="dst">${p.dist.toFixed(1)} km</span>${farmMun(p)?'<span class="cfarm">💊 Farmácia</span>':''}</div><div class="cn">${p.nome}</div><div class="ce">${p.end}</div><div class="creg">📍 ${p.reg}</div>${hr}${sp}<div class="cbt"><a class="bm" href="${rt}" target="_blank">🗺️ Rota</a>${tb}<a class="bw" href="${wt}" target="_blank">📱 Enviar</a>${sb}</div></div></div></div>`}).join("");
 if(totalPag>1){
   let pgHtml='<div class="pgn">';
   pgHtml+=`<button class="pgb" ${pag===1?'disabled':''} onclick="mudaPag(${pag-1})">← Ant.</button>`;
@@ -1455,7 +1478,7 @@ function mudaPag(n){pag=n;rR();document.querySelector(".sb").scrollIntoView({beh
 
 function oD(idx){const p=P[idx],c=COR[p.tipo]||"#64748b",ic=ICO[p.tipo]||"📍";
 const rt=mkRota(p);const wt=mkWhats(p);
-let h=`<div class="dt-hd" style="background:linear-gradient(135deg,${c}15,${c}08)"><button class="dt-x" onclick="fD()">&times;</button><div style="font-size:28px;margin-bottom:8px">${ic}</div><div class="dt-nm">${p.nome}</div><span class="dt-bd" style="background:${c}30;color:${c}">${p.tipo}</span><span class="dt-bd" style="background:#1e293b;color:#b39ddb;margin-left:4px">📍 ${p.reg}</span></div><div class="dt-info">`;
+let h=`<div class="dt-hd" style="background:linear-gradient(135deg,${c}15,${c}08)"><button class="dt-x" onclick="fD()">&times;</button><div style="font-size:28px;margin-bottom:8px">${ic}</div><div class="dt-nm">${p.nome}</div><span class="dt-bd" style="background:${c}30;color:${c}">${p.tipo}</span><span class="dt-bd" style="background:#1e293b;color:#b39ddb;margin-left:4px">📍 ${p.reg}</span>${farmMun(p)?`<span class="dt-bd farm" style="margin-left:4px">💊 Farmácia</span>`:''}</div><div class="dt-info">`;
 h+=`<div class="dt-sec"><div class="dt-st">📋 Informações</div>`;
 h+=`<div class="dt-row"><div class="dt-ri">📍</div><div class="dt-rt"><span class="dt-rl">Endereço:</span> ${p.end}${p.cep?" – CEP "+p.cep:""}</div></div>`;
 if(p.tel)h+=`<div class="dt-row"><div class="dt-ri">📞</div><div class="dt-rt"><span class="dt-rl">Telefone:</span> <a href="tel:${p.tel.replace(/\D/g,"")}" style="color:#81c784;text-decoration:none;font-size:16px">${p.tel}</a></div></div>`;
@@ -1470,6 +1493,7 @@ if(p.extra)h+=`<div class="dt-sec"><div class="dt-st">✨ Extras</div><div class
 h+=`</div><div class="dt-act"><a href="${rt}" target="_blank" style="background:linear-gradient(135deg,#1a237e,#283593);color:#fff">🗺️ Rota</a>`;
 if(p.tel)h+=`<a href="tel:${p.tel.replace(/\D/g,"")}" style="background:#1b5e20;color:#81c784;border:1px solid #2e7d32">📞 Ligar</a>`;
 h+=`<a href="${wt}" target="_blank" style="background:#075e25;color:#25d366;border:1px solid #25d366">📱 WhatsApp</a>`;
+if(farmMun(p))h+=`<a href="${URL_REMEDIO_HORA}" target="_blank" style="background:#0a3d1a;color:#3fb950;border:1px solid #2e7d32">💊 Buscar remédio</a>`;
 h+=`<a href="javascript:fD()" style="background:#1e293b;color:#94a3b8;border:1px solid #334155">✕ Fechar</a>`;
 h+=`</div>`;document.getElementById("dt").innerHTML=h;document.getElementById("ov").classList.add("sh");document.body.style.overflow="hidden"}
 
@@ -1499,9 +1523,13 @@ acL.querySelectorAll(".ac-item").forEach(el=>{el.addEventListener("click",async(
 
 function useSel(){if(!selCoords)return;cE();document.getElementById("found").classList.remove("sh");const f=document.getElementById("found");f.textContent="📍 "+inp.value;f.classList.add("sh");calc(selCoords.lat,selCoords.lng)}
 
-async function buscar(){if(selCoords){useSel();return}const input=inp.value.trim();if(!input)return;const btn=document.getElementById("btnB");btn.disabled=true;btn.textContent="Buscando...";cE();document.getElementById("res").innerHTML='<div class="skel"></div><div class="skel"></div><div class="skel"></div>';document.getElementById("found").classList.remove("sh");try{const base="https://nominatim.openstreetmap.org/search?format=json&countrycodes=br&limit=5";let d=[];const cM=input.replace(/\D/g,"");if(cM.length===8){const r=await fetch(base+"&postalcode="+cM+"&city=S%C3%A3o+Paulo&state=S%C3%A3o+Paulo");d=await r.json()}if(!d.length){const r0=await fetch(base+"&street="+encodeURIComponent(input)+"&city=S%C3%A3o+Paulo&state=S%C3%A3o+Paulo");d=await r0.json()}if(!d.length){const r1=await fetch(base+"&q="+encodeURIComponent(input+", São Paulo, SP, Brasil"));d=await r1.json()}d=d.filter(x=>(x.display_name||"").toLowerCase().includes("são paulo"));d.sort((a,b)=>{const dA=Math.abs(parseFloat(a.lat)+23.49)+Math.abs(parseFloat(a.lon)+46.44);const dB=Math.abs(parseFloat(b.lat)+23.49)+Math.abs(parseFloat(b.lon)+46.44);return dA-dB});if(!d.length){sE("Endereço não encontrado. Inclua o bairro.");btn.disabled=false;btn.textContent="🔍 BUSCAR";document.getElementById("res").innerHTML="";return};const f=document.getElementById("found");f.textContent="📍 "+d[0].display_name.split(",").slice(0,3).join(",");f.classList.add("sh");calc(parseFloat(d[0].lat),parseFloat(d[0].lon))}catch(e){sE("Erro na busca. Verifique sua conexão.");document.getElementById("res").innerHTML=""}btn.disabled=false;btn.textContent="🔍 BUSCAR"}
+function voz(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){sE("Busca por voz não disponível neste navegador. Digite o endereço.");return}const rec=new SR();rec.lang="pt-BR";rec.interimResults=false;rec.maxAlternatives=1;const b=document.getElementById("btnMic");b.textContent="🔴";b.disabled=true;cE();rec.onresult=e=>{const t=e.results[0][0].transcript;inp.value=t;selCoords=null;acL.classList.remove("sh");buscar()};rec.onerror=e=>{sE(e.error==="not-allowed"||e.error==="service-not-allowed"?"Permita o acesso ao microfone.":"Não consegui ouvir. Tente novamente.")};rec.onend=()=>{b.textContent="🎤";b.disabled=false};try{rec.start()}catch(err){b.textContent="🎤";b.disabled=false}}
 
-function usarGPS(){if(!navigator.geolocation){sE("GPS não disponível.");return}const btn=document.getElementById("btnB");btn.disabled=true;btn.textContent="📍 Localizando...";cE();document.getElementById("res").innerHTML='<div class="skel"></div><div class="skel"></div>';navigator.geolocation.getCurrentPosition(p=>{document.getElementById("endereco").value="📍 Minha localização";const f=document.getElementById("found");f.textContent="📍 Localização GPS obtida com sucesso";f.classList.add("sh");calc(p.coords.latitude,p.coords.longitude);btn.disabled=false;btn.textContent="🔍 BUSCAR"},()=>{sE("Não foi possível obter localização. Permita o acesso ao GPS.");btn.disabled=false;btn.textContent="🔍 BUSCAR";document.getElementById("res").innerHTML=""},{enableHighAccuracy:true,timeout:15000})}
+function vozServ(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){sE("Busca por voz não disponível neste navegador.");return}const rec=new SR();rec.lang="pt-BR";rec.interimResults=false;rec.maxAlternatives=1;const b=document.getElementById("btnMicServ");b.textContent="🔴";b.disabled=true;cE();rec.onresult=e=>{const raw=e.results[0][0].transcript;const t=fN(raw);const sel=document.getElementById("ssel");const opts=[...sel.options].map(o=>o.value).filter(Boolean);let match=opts.find(o=>fN(o)===t)||opts.find(o=>fN(o).includes(t))||opts.find(o=>t.includes(fN(o)));if(!match){const tw=t.split(/\s+/).filter(w=>w.length>2);match=opts.find(o=>{const on=fN(o);return tw.some(w=>on.includes(w))})}if(match){sel.value=match;filtS()}else{sE('Nenhum serviço parecido com "'+raw+'".')}};rec.onerror=e=>{sE(e.error==="not-allowed"||e.error==="service-not-allowed"?"Permita o acesso ao microfone.":"Não consegui ouvir. Tente novamente.")};rec.onend=()=>{b.textContent="🎤";b.disabled=false};try{rec.start()}catch(err){b.textContent="🎤";b.disabled=false}}
+
+async function buscar(){if(selCoords){useSel();return}const _ac=acL.querySelectorAll(".ac-item");if(_ac.length){_ac[0].click();return}const input=inp.value.trim();if(!input)return;const btn=document.getElementById("btnB");btn.disabled=true;btn.textContent="Buscando...";cE();document.getElementById("res").innerHTML='<div class="skel"></div><div class="skel"></div><div class="skel"></div>';document.getElementById("found").classList.remove("sh");try{const base="https://nominatim.openstreetmap.org/search?format=json&countrycodes=br&limit=5";let d=[];const cM=input.replace(/\D/g,"");if(cM.length===8){const r=await fetch(base+"&postalcode="+cM+"&city=S%C3%A3o+Paulo&state=S%C3%A3o+Paulo");d=await r.json()}if(!d.length){const r0=await fetch(base+"&street="+encodeURIComponent(input)+"&city=S%C3%A3o+Paulo&state=S%C3%A3o+Paulo");d=await r0.json()}if(!d.length){const r1=await fetch(base+"&q="+encodeURIComponent(input+", São Paulo, SP, Brasil"));d=await r1.json()}d=d.filter(x=>(x.display_name||"").toLowerCase().includes("são paulo"));d.sort((a,b)=>{const dA=Math.abs(parseFloat(a.lat)+23.49)+Math.abs(parseFloat(a.lon)+46.44);const dB=Math.abs(parseFloat(b.lat)+23.49)+Math.abs(parseFloat(b.lon)+46.44);return dA-dB});if(!d.length){sE("Endereço não encontrado. Inclua o bairro.");btn.disabled=false;btn.textContent="📍 USAR MINHA LOCALIZAÇÃO";document.getElementById("res").innerHTML="";return};const f=document.getElementById("found");f.textContent="📍 "+d[0].display_name.split(",").slice(0,3).join(",");f.classList.add("sh");calc(parseFloat(d[0].lat),parseFloat(d[0].lon))}catch(e){sE("Erro na busca. Verifique sua conexão.");document.getElementById("res").innerHTML=""}btn.disabled=false;btn.textContent="📍 USAR MINHA LOCALIZAÇÃO"}
+
+function usarGPS(){if(!navigator.geolocation){sE("GPS não disponível.");return}const btn=document.getElementById("btnB");btn.disabled=true;btn.textContent="📍 Localizando...";cE();document.getElementById("res").innerHTML='<div class="skel"></div><div class="skel"></div>';navigator.geolocation.getCurrentPosition(p=>{document.getElementById("endereco").value="📍 Minha localização";const f=document.getElementById("found");f.textContent="📍 Localização GPS obtida com sucesso";f.classList.add("sh");calc(p.coords.latitude,p.coords.longitude);btn.disabled=false;btn.textContent="📍 USAR MINHA LOCALIZAÇÃO"},()=>{sE("Não foi possível obter localização. Permita o acesso ao GPS.");btn.disabled=false;btn.textContent="📍 USAR MINHA LOCALIZAÇÃO";document.getElementById("res").innerHTML=""},{enableHighAccuracy:true,timeout:15000})}
 
 // Scroll to top button
 let scrollTicking=false;
@@ -1531,10 +1559,6 @@ if ("serviceWorker" in navigator) {
       .catch(e => console.log("SW erro:", e));
   });
 }
-</script>
-</body>
-</html>
-
 </script>
 </body>
 </html>
